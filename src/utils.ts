@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import {exec} from 'child_process';
+import {exec, spawn} from 'child_process';
 import * as inquirer from 'inquirer';
 import * as path from 'path';
 import * as pify from 'pify';
@@ -11,11 +11,19 @@ import * as pify from 'pify';
 
 const Utils = {
 
-  exec ( command ) {
+  exec ( command, options = {} ) {
 
     const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
 
-    return pify ( exec )( command, {cwd} );
+    return pify ( exec )( command, _.extend ( {cwd}, options ) );
+
+  },
+
+  spawn ( command, args: string[] = [], options = {} ) {
+
+    const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
+
+    return spawn ( command, args, _.extend ( {cwd}, options ) );
 
   },
 
