@@ -62,6 +62,7 @@ const Utils = {
         type: 'list',
         name: 'result',
         choices: arr,
+        pageSize: 10,
         message,
         default: fallback,
         validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && x.trim () )
