@@ -2,7 +2,7 @@
 
 Watch anything instantaneously, just write its name.
 
-It searches a magnet for you and streams it using [webtorrent](https://webtorrent.io) to your favorite app.
+It searches a magnet for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli) to your favorite app.
 
 ## Install
 
@@ -12,18 +12,29 @@ $ npm install -g @fabiospampinato/watch
 
 ## Usage
 
-### Wizard
+#### Wizard
 
-Execute `watch` to run a wizard, it'll ask you everything it needs: a search query, a title picked from a list, and which app to use.
+Execute `watch` to run a wizard, it'll ask you everything it needs: a search query, which title to stream, and which app to use.
 
-![Wizard](resources/wizard.gif)
+<p align="center">
+	<img src="resources/wizard.gif" width="600" alt="Wizard">
+</p>
 
-### I'm Feeling Lucky
+#### I'm Feeling Lucky
 
-If you feel lucky, just run something like:
+If you're feeling lucky, just run something like this to automatically pick the first result:
 
 ```shell
-watch "Star Wreck"
+watch Star Wreck
+```
+
+#### WebTorrent Options
+
+You can pass arbitrary options to [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli), read more about them [here](https://github.com/fabiospampinato/webtorrent-cli). Just write them after the special `--` argument:
+
+```shell
+watch -- --vlc --port 1234
+watch Star Wreck -- --vlc --port 1234
 ```
 
 ## License
