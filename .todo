@@ -1,7 +1,13 @@
 
-☐ Add support for more apps
-☐ Add supports for subtitles
-☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
-☐ provice seeders/leechers count
-☐ add an alfred workflow
-☐ Add settings, so that we can default to a specific app
+Now:
+  ☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
+  ☐ Provide seeders/leechers count
+
+Next:
+  ☐ Properly detect default app
+  ☐ Save files under ~/Downloads
+
+Future:
+  ☐ Add settings, so that we can default to a specific app
+  ☐ Add supports for subtitles
+  ☐ Add an alfred workflow
