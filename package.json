@@ -1,0 +1,44 @@
+{
+  "name": "@fabiospampinato/watch",
+  "version": "1.0.0",
+  "description": "Watch anything instantaneously, just write it's name.",
+  "bin": "dist/bin/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "compile": "tsc --skipLibCheck",
+    "compile:watch": "tsc --skipLibCheck --watch",
+    "lint": "tslint \"src/**/*.ts*\" --force",
+    "prepublish": "npm run clean && npm run lint && npm run compile"
+  },
+  "bugs": {
+    "url": "https://github.com/fabiospampinato/watch/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Fabio Spampinato",
+    "email": "spampinabio@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabiospampinato/watch.git"
+  },
+  "keywords": [],
+  "dependencies": {
+    "caporal": "^0.7.0",
+    "inquirer": "^3.2.3",
+    "lodash": "^4.17.4",
+    "magnet-cli": "^0.1.1",
+    "open": "0.0.5",
+    "pify": "^3.0.0",
+    "read-pkg-up": "^2.0.0",
+    "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-support"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.26",
+    "rimraf": "^2.6.0",
+    "tslint": "^4.4.2",
+    "typescript": "~2.2.0"
+  }
+}

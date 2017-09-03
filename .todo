@@ -1,0 +1,6 @@
+
+☐ Add support for more apps
+☐ Add supports for subtitles
+☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
+☐ provice seeders/leechers count
+☐ Add settings, so that we can default to a specific app
