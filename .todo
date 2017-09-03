@@ -3,4 +3,5 @@
 ☐ Add supports for subtitles
 ☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
 ☐ provice seeders/leechers count
+☐ add an alfred workflow
 ☐ Add settings, so that we can default to a specific app

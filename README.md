@@ -7,7 +7,7 @@ It searches a magnet for you and streams it using [webtorrent](https://webtorren
 ## Install
 
 ```shell
-$ npm install --save @fabiospampinato/watch
+$ npm install -g @fabiospampinato/watch
 ```
 
 ## Usage
