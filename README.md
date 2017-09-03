@@ -1,6 +1,6 @@
 # Watch
 
-Watch anything instantaneously, just write it's name.
+Watch anything instantaneously, just write its name.
 
 It searches a magnet for you and streams it using [webtorrent](https://webtorrent.io) to your favorite app.
 
