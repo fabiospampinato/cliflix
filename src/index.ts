@@ -2,13 +2,12 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import Config from './config';
 import Utils from './utils';
 
 /* WATCH */
 
 const Watch = {
-
-  rows: 10,
 
   async wizard () {
 
@@ -23,15 +22,13 @@ const Watch = {
 
     if ( !magnet ) return console.error ( `No magnet found for "${title}"` );
 
-    // const outputs = ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'OMXPlayer', 'VLC', 'IINA', 'XBMC'],
-    const outputs = ['IINA', 'VLC', 'XBMC'],
-          output = await Utils.prompt.list ( 'Which app?', outputs );
+    const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
 
     Watch.stream ( magnet, output );
 
   },
 
-  async getTitles ( query, rows = Watch.rows ) {
+  async getTitles ( query, rows = Config.rows ) {
 
     const titles = await Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}"` );
 
@@ -41,7 +38,7 @@ const Watch = {
 
   },
 
-  async getMagnet ( query, index = 1, rows = Watch.rows ) {
+  async getMagnet ( query, index = 1, rows = Config.rows ) {
 
     return Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}" ${index}` );
 
@@ -53,7 +50,7 @@ const Watch = {
 
   },
 
-  async lucky ( query, output = 'IINA' ) {
+  async lucky ( query, output = Config.output ) {
 
     const magnet = await Watch.getMagnet ( query );
 
