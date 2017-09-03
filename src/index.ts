@@ -9,7 +9,7 @@ import Utils from './utils';
 
 const Watch = {
 
-  async wizard () {
+  async wizard ( webtorrentOptions: string[] = [] ) {
 
     const query = await Utils.prompt.input ( 'What do you want to watch?' ),
           titles = await Watch.getTitles ( query );
@@ -22,9 +22,15 @@ const Watch = {
 
     if ( !magnet ) return console.error ( `No magnet found for "${title}"` );
 
-    const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
+    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
 
-    Watch.stream ( magnet, output );
+      const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
+
+      webtorrentOptions = [`--${output.toLowerCase ()}`];
+
+    }
+
+    Watch.stream ( magnet, webtorrentOptions );
 
   },
 
@@ -44,19 +50,25 @@ const Watch = {
 
   },
 
-  async stream ( magnet, output ) {
+  async stream ( magnet, webtorrentOptions: string[] = [] ) {
 
-    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, `--${output.toLowerCase ()}`], { stdio: 'inherit' } );
+    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
+
+      webtorrentOptions = [`--${Config.output.toLowerCase ()}`];
+
+    }
+
+    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { stdio: 'inherit' } );
 
   },
 
-  async lucky ( query, output = Config.output ) {
+  async lucky ( query, webtorrentOptions: string[] = [] ) {
 
     const magnet = await Watch.getMagnet ( query );
 
     if ( !magnet ) return console.error ( `No magnet found for "${query}"` );
 
-    return Watch.stream ( magnet, output );
+    return Watch.stream ( magnet, webtorrentOptions );
 
   }
 
