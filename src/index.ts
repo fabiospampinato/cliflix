@@ -46,7 +46,7 @@ const Watch = {
 
   async stream ( magnet, output ) {
 
-    return Utils.exec ( `./node_modules/.bin/webtorrent download "${magnet}" --${output.toLowerCase ()}` );
+    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, `--${output.toLowerCase ()}`], { stdio: 'inherit' } );
 
   },
 
