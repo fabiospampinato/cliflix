@@ -4,6 +4,7 @@
 import * as _ from 'lodash';
 import * as caporal from 'caporal';
 import * as readPkg from 'read-pkg-up';
+import Utils from './utils';
 import Watch from '.';
 
 /* CLI */
@@ -16,7 +17,9 @@ async function CLI () {
     .version ( pkg.version )
     .argument ( '[title]', 'Video title' )
     .argument ( '[-- webtorrent options...]', 'WebTorrent options' )
-    .action ( args => {
+    .action ( async ( args ) => {
+
+      await Utils.checkConnection ();
 
       args = _.castArray ( args.title || [] ).concat ( args.webtorrentOptions );
 

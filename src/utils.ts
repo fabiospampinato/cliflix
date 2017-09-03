@@ -2,8 +2,10 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import * as chalk from 'chalk';
 import {exec, spawn} from 'child_process';
 import * as inquirer from 'inquirer';
+import * as isOnline from 'is-online';
 import * as path from 'path';
 import * as pify from 'pify';
 
@@ -23,7 +25,15 @@ const Utils = {
 
     const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
 
-    return spawn ( command, args, _.extend ( {cwd}, options ) );
+    spawn ( command, args, _.extend ( {cwd}, options ) ); //TSC: can't return
+
+  },
+
+  async checkConnection () {
+
+    const online = await isOnline ();
+
+    if ( !online ) throw new Error ( chalk.red ( `Looks like you are offline, try again later.\n` ) ) ;
 
   },
 
