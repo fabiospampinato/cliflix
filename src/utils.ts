@@ -87,10 +87,46 @@ const Utils = {
 
     async title ( message, titles ) {
 
-      const list = titles.map ( title => ({
-        name: title.title,
-        value: title
+      /* TABLE */
+
+      const table: string[][] = [];
+
+      titles.forEach ( title => {
+
+        const row: string[] = [];
+
+        row.push ( title.title );
+
+        if ( Config.details.seeders ) row.push ( chalk.green ( `${title.seeds}` ) );
+        if ( Config.details.leechers ) row.push ( chalk.red ( `${title.peers}` ) );
+        if ( Config.details.size ) row.push ( chalk.yellow ( title.size ) );
+        if ( Config.details.time ) row.push ( chalk.magenta ( title.time ) );
+
+        table.push ( row );
+
+      });
+
+      /* PADDING */
+
+      const row = table[0];
+
+      row.forEach ( ( x, index ) => {
+
+        const maxLength = _.max ( table.map ( row => row[index].length ) ),
+              padFN = index > 0 ? 'padStart' : 'padEnd';
+
+        table.forEach ( row => row[index] = _[padFN]( row[index], maxLength ) );
+
+      });
+
+      /* JOINING */
+
+      const list = table.map ( ( row, index ) => ({
+        name: row.join ( '   ' ),
+        value: titles[index]
       }));
+
+      /* INQUIRER */
 
       return await Utils.prompt.list ( message, list );
 
