@@ -1,7 +1,7 @@
 
 Now:
-  ☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
-  ☐ Provide seeders/leechers count
+  ☐ Populate the `engine` key of package.json @high
+  ☐ Add support for streaming a path to a torrent, a magnet taken from somewhere else etc.
 
 Next:
   ☐ Properly detect default app
@@ -9,5 +9,8 @@ Next:
 
 Future:
   ☐ Add settings, so that we can default to a specific app
+    ☐ Add support for searching into multiple categories
+    ☐ Add support for setting the favorite torrent providers (perhaps TPB is blocked or something)
+  ☐ Add ability to close the shell while still keeping the stream on
   ☐ Add supports for subtitles
   ☐ Add an alfred workflow

@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import * as execa from 'execa';
+import * as path from 'path';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
@@ -58,7 +59,10 @@ const Watch = {
     webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
 
     const execArgs = ['download', torrent, ...webtorrentOptions],
-          execOpts = { stdio: 'inherit' };
+          execOpts = {
+            cwd: path.resolve ( __dirname, '..' ),
+            stdio: 'inherit'
+          };
 
     execa.sync ( 'webtorrent', execArgs, execOpts );
 
