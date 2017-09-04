@@ -83,6 +83,17 @@ const Utils = {
 
       return result;
 
+    },
+
+    async title ( message, titles ) {
+
+      const list = titles.map ( title => ({
+        name: title.title,
+        value: title
+      }));
+
+      return await Utils.prompt.list ( message, list );
+
     }
 
   }
