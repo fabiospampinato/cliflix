@@ -34,7 +34,6 @@ const Watch = {
 
   },
 
-  async getTitles ( query, rows = Config.rows ) {
 
     const titles = await Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}"` );
 
@@ -45,6 +44,7 @@ const Watch = {
   },
 
   async getMagnet ( query, index = 1, rows = Config.rows ) {
+  async getTitles ( query, rows = Config.searchNr ) {
 
     return Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}" ${index}` );
 

@@ -8,6 +8,7 @@ import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
 import * as path from 'path';
 import * as pify from 'pify';
+import Config from './config';
 
 /* UTILS */
 
@@ -68,11 +69,13 @@ const Utils = {
 
     async list ( message, arr, fallback? ) {
 
+      if ( arr.length > Config.listNr ) arr.push ( new inquirer.Separator ( '\n' ) );
+
       const {result} = await inquirer.prompt ({
         type: 'list',
         name: 'result',
         choices: arr,
-        pageSize: 10,
+        pageSize: Config.listNr,
         message,
         default: fallback,
         validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && x.trim () )
