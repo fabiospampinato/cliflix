@@ -4,6 +4,7 @@
 import * as _ from 'lodash';
 import * as caporal from 'caporal';
 import * as readPkg from 'read-pkg-up';
+import * as updateNotifier from 'update-notifier';
 import Utils from './utils';
 import Watch from '.';
 
@@ -20,6 +21,8 @@ async function CLI () {
     .action ( async ( args ) => {
 
       await Utils.checkConnection ();
+
+      updateNotifier ({ pkg }).notify ();
 
       args = _.castArray ( args.title || [] ).concat ( args.webtorrentOptions );
 
