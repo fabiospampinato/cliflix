@@ -9,7 +9,7 @@ const Config = {
   details: {
     seeders: true,
     leechers: true,
-    size: false,
+    size: true,
     time: false
   }
 };

@@ -4,10 +4,12 @@
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import {exec, spawn} from 'child_process';
+import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
 import * as path from 'path';
 import * as pify from 'pify';
+import * as prettySize from 'prettysize';
 import Config from './config';
 
 /* UTILS */
@@ -99,7 +101,7 @@ const Utils = {
 
         if ( Config.details.seeders ) row.push ( chalk.green ( `${title.seeds}` ) );
         if ( Config.details.leechers ) row.push ( chalk.red ( `${title.peers}` ) );
-        if ( Config.details.size ) row.push ( chalk.yellow ( title.size ) );
+        if ( Config.details.size ) row.push ( chalk.yellow ( Utils.torrent.parseSize ( title.size ) ) );
         if ( Config.details.time ) row.push ( chalk.magenta ( title.time ) );
 
         table.push ( row );
@@ -129,6 +131,26 @@ const Utils = {
       /* INQUIRER */
 
       return await Utils.prompt.list ( message, list );
+
+    }
+
+  },
+
+  torrent: {
+
+    parseSize ( size ) {
+
+      try {
+
+        const bytes = filesizeParser ( size );
+
+        return prettySize ( bytes, true, true, 1 );
+
+      } catch ( e ) {
+
+        return size;
+
+      }
 
     }
 

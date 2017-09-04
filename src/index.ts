@@ -1,7 +1,6 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
