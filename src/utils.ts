@@ -3,6 +3,8 @@
 
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
+import * as cliWidth from 'cli-width';
+import * as truncate from 'cli-truncate';
 import {exec, spawn} from 'child_process';
 import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
@@ -89,37 +91,63 @@ const Utils = {
 
     async title ( message, titles ) {
 
+      const maxWidth = cliWidth () - 6; // Accounting for inquirer's characters too
+
       /* TABLE */
 
-      const table: string[][] = [];
+      let table: string[][] = [];
 
       titles.forEach ( title => {
 
         const row: string[] = [];
 
-        row.push ( Utils.torrent.parseTitle ( title.title ) );
+        row.push ( truncate ( Utils.torrent.parseTitle ( title.title ), maxWidth ) );
 
-        if ( Config.details.seeders ) row.push ( chalk.green ( `${title.seeds}` ) );
-        if ( Config.details.leechers ) row.push ( chalk.red ( `${title.peers}` ) );
-        if ( Config.details.size ) row.push ( chalk.yellow ( Utils.torrent.parseSize ( title.size ) ) );
-        if ( Config.details.time ) row.push ( chalk.magenta ( title.time ) );
+        if ( Config.details.seeders ) row.push ( `${title.seeds}` );
+        if ( Config.details.leechers ) row.push ( `${title.peers}` );
+        if ( Config.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
+        if ( Config.details.time ) row.push ( title.time );
 
         table.push ( row );
 
       });
 
-      /* PADDING */
+      /* FORMATTING */
 
-      const row = table[0];
+      if ( table[0].length > 1 ) {
 
-      row.forEach ( ( x, index ) => {
+        /* MAX LENGHTS  */
 
-        const maxLength = _.max ( table.map ( row => row[index].length ) ),
-              padFN = index > 0 ? 'padStart' : 'padEnd';
+        const maxLenghts = table[0].map ( ( val, index ) => _.max ( table.map ( row => row[index].length ) ) ),
+              overflowColumn = maxLenghts.findIndex ( ( length, index ) => ( _.sum ( maxLenghts.slice ( 0, index + 1 ) ) + ( index * 4 ) ) > maxWidth ),
+              maxColumn = overflowColumn >= 0 ? Math.max ( 0, overflowColumn - 1 ) : maxLenghts.length - 1;
 
-        table.forEach ( row => row[index] = _[padFN]( row[index], maxLength ) );
+        /* FILTERING */
 
-      });
+        table = table.map ( row => row.slice ( 0, maxColumn + 1) );
+
+        /* PADDING */
+
+        table = table.map ( row => {
+          return row.map ( ( val, index ) => {
+            const padFN = index > 0 ? 'padStart' : 'padEnd';
+            return _[padFN]( val, maxLenghts[index] );
+          });
+        });
+
+        /* COLORIZE */
+
+        const colors = [undefined, 'green', 'red', 'yellow', 'magenta'];
+
+        table = table.map ( row => {
+          return row.map ( ( val, index ) => {
+            const color = colors[index];
+            if ( !color ) return val;
+            return chalk[color]( val );
+          });
+        });
+
+      }
 
       /* JOINING */
 
@@ -142,7 +170,7 @@ const Utils = {
 
       return title.replace ( /\d+(\.\d+)? ?[k|m|g|t]b/gi, '' ) // Size info
                   .replace ( /\s\s+/g, ' ' ) // Multiple spaces
-                  .replace ( /- -/, '-' ) // Empty block between dashes
+                  .replace ( /- -/g, '-' ) // Empty blocks between dashes
                   .replace ( /\s*-$/, '' ); // Ending dash
 
     },

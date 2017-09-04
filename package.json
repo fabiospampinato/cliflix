@@ -33,6 +33,8 @@
   "dependencies": {
     "caporal": "^0.7.0",
     "chalk": "^2.1.0",
+    "cli-truncate": "^1.1.0",
+    "cli-width": "^2.2.0",
     "filesize-parser": "^1.4.1",
     "inquirer": "^3.2.3",
     "is-online": "^7.0.0",
