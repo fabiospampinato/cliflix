@@ -1,6 +1,8 @@
 
 /* IMPORT */
 
+import {spawn} from 'child_process';
+import * as path from 'path';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
@@ -60,7 +62,9 @@ const Watch = {
 
     }
 
-    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { stdio: 'inherit' } );
+    const cwd = path.resolve ( __dirname, '.' ); // In order to properly call programs under `/node_modules/.bin`
+
+    spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { cwd: cwd, stdio: 'inherit' } ); //TSC: can't return
 
   }
 

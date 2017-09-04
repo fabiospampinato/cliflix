@@ -5,34 +5,15 @@ import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import * as cliWidth from 'cli-width';
 import * as truncate from 'cli-truncate';
-import {exec, spawn} from 'child_process';
 import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
-import * as path from 'path';
-import * as pify from 'pify';
 import * as prettySize from 'prettysize';
 import Config from './config';
 
 /* UTILS */
 
 const Utils = {
-
-  exec ( command, options = {} ) {
-
-    const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
-
-    return pify ( exec )( command, _.extend ( {cwd}, options ) );
-
-  },
-
-  spawn ( command, args: string[] = [], options = {} ) {
-
-    const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
-
-    spawn ( command, args, _.extend ( {cwd}, options ) ); //TSC: can't return
-
-  },
 
   async checkConnection () {
 
