@@ -172,6 +172,47 @@ const Utils = {
 
     }
 
+  },
+
+  webtorrent: {
+
+    options: {
+
+      isAppSet ( options: string[] ) {
+
+        const appRe = new RegExp ( `^--(${Config.outputs.join ( '|' )})$`, 'i' ),
+              isAppSet = !!options.find ( option => !!option.match ( appRe ) );
+
+        return isAppSet;
+
+      },
+
+      setApp ( options: string[], app: string ) {
+
+        options.push ( `--${app.toLowerCase ()}` );
+
+        return options;
+
+      },
+
+      parse ( options: string[] ) {
+
+        /* ENSURING --APP SWITCH */
+
+        if ( !Utils.webtorrent.options.isAppSet ( options ) ) {
+
+          options = Utils.webtorrent.options.setApp ( options, Config.output );
+
+        }
+
+        /* RETURN */
+
+        return options;
+
+      }
+
+    }
+
   }
 
 };

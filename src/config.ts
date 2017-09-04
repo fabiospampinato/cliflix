@@ -4,7 +4,7 @@
 const Config = {
   listNr: 10,
   searchNr: 30,
-  outputs: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'OMXPlayer', 'VLC', 'IINA', 'XBMC'],
+  outputs: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'VLC', 'IINA', 'XBMC'],
   output: 'VLC',
   details: {
     seeders: true,

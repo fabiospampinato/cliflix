@@ -20,11 +20,11 @@ const Watch = {
 
     const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
 
-    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
+    if ( !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
 
-      const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
+      const app = await Utils.prompt.list ( 'Which app?', Config.outputs );
 
-      webtorrentOptions = [`--${output.toLowerCase ()}`];
+      webtorrentOptions = Utils.webtorrent.options.setApp ( webtorrentOptions, app );
 
     }
 
@@ -56,11 +56,7 @@ const Watch = {
 
   async stream ( magnet, webtorrentOptions: string[] = [] ) {
 
-    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
-
-      webtorrentOptions = [`--${Config.output.toLowerCase ()}`];
-
-    }
+    webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
 
     const cwd = path.resolve ( __dirname, '.' ); // In order to properly call programs under `/node_modules/.bin`
 
