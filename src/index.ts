@@ -1,8 +1,7 @@
 
 /* IMPORT */
 
-import {spawn} from 'child_process';
-import * as path from 'path';
+import * as execa from 'execa';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
@@ -54,13 +53,14 @@ const Watch = {
 
   },
 
-  async stream ( magnet, webtorrentOptions: string[] = [] ) {
+  async stream ( torrent, webtorrentOptions: string[] = [] ) {
 
     webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
 
-    const cwd = path.resolve ( __dirname, '.' ); // In order to properly call programs under `/node_modules/.bin`
+    const execArgs = ['download', torrent, ...webtorrentOptions],
+          execOpts = { stdio: 'inherit' };
 
-    spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { cwd: cwd, stdio: 'inherit' } ); //TSC: can't return
+    execa.sync ( 'webtorrent', execArgs, execOpts );
 
   }
 
