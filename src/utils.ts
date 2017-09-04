@@ -97,7 +97,7 @@ const Utils = {
 
         const row: string[] = [];
 
-        row.push ( title.title );
+        row.push ( Utils.torrent.parseTitle ( title.title ) );
 
         if ( Config.details.seeders ) row.push ( chalk.green ( `${title.seeds}` ) );
         if ( Config.details.leechers ) row.push ( chalk.red ( `${title.peers}` ) );
@@ -137,6 +137,15 @@ const Utils = {
   },
 
   torrent: {
+
+    parseTitle ( title ) {
+
+      return title.replace ( /\d+(\.\d+)? ?[k|m|g|t]b/gi, '' ) // Size info
+                  .replace ( /\s\s+/g, ' ' ) // Multiple spaces
+                  .replace ( /- -/, '-' ) // Empty block between dashes
+                  .replace ( /\s*-$/, '' ); // Ending dash
+
+    },
 
     parseSize ( size ) {
 
