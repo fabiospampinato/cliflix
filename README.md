@@ -2,7 +2,7 @@
 
 Watch anything instantaneously, just write its name.
 
-It searches a magnet for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli) to your favorite app.
+It searches a magnet for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-support) to your favorite app.
 
 ## Install
 
@@ -30,7 +30,7 @@ watch Star Wreck
 
 #### WebTorrent Options
 
-You can pass arbitrary options to [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli), read more about them [here](https://github.com/fabiospampinato/webtorrent-cli). Just write them after the special `--` argument:
+You can pass arbitrary options to [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-support), read more about them [here](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-support). Just write them after the special `--` argument:
 
 ```shell
 watch -- --vlc --port 1234
