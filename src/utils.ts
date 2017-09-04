@@ -124,7 +124,7 @@ const Utils = {
       /* JOINING */
 
       const list = table.map ( ( row, index ) => ({
-        name: row.join ( '   ' ),
+        name: row.length > 1 ? `| ${row.join ( ' | ' )} |` : row[0],
         value: titles[index]
       }));
 
