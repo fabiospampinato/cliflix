@@ -1,12 +1,13 @@
 
 /* IMPORT */
 
-import * as execa from 'execa';
 import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import * as TorrentSearch from 'torrent-search-api';
+import * as opensubtitles from 'subtitler';
 import Config from './config';
 import Utils from './utils';
+import * as child_process from 'child_process';
 
 /* WATCH */
 
@@ -19,7 +20,18 @@ const Watch = {
 
     if ( !titles.length ) return console.error ( `No titles found for "${query}"` );
 
-    const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
+    const { magnet, title } = await Utils.prompt.title ( 'Which title?', titles );
+
+    const useSubtitles = await Utils.prompt.yesOrNo('Do you want to watch with subtitles?');
+    let subtitleFile: string = '';
+    if (useSubtitles) {
+      const subtitleLang = await Utils.prompt.input ( 'What language do you want your subtitles to be in?' );
+      // check if lang is correct
+      subtitleFile = await Watch.getSubtitles(title, subtitleLang);
+      if ( !subtitleFile ) return console.error ( `No subtitles found for "${title}"` );
+
+      webtorrentOptions.push(`--subtitles ${subtitleFile}`);
+    }
 
     if ( !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
 
@@ -67,17 +79,27 @@ const Watch = {
 
   },
 
+  async getSubtitles (movieName, lang) {
+    const token = await opensubtitles.api.login();
+    const results = await opensubtitles.api.searchForTitle(token, lang, movieName);
+
+    if (results.length === 0 || !results[0].SubDownloadLink) return '';
+
+    const subtitleDownloadLink = results[0].SubDownloadLink;
+    
+    const subtitlesFile = await Utils.downloadGunzip(subtitleDownloadLink);
+    return subtitlesFile;
+  },
+
   async stream ( torrent, webtorrentOptions: string[] = [] ) {
 
     webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
 
-    const execArgs = ['download', torrent, ...webtorrentOptions],
-          execOpts = {
-            cwd: path.resolve ( __dirname, '..' ),
-            stdio: 'inherit'
-          };
-
-    execa.sync ( 'webtorrent', execArgs, execOpts );
+    return child_process.spawn(`./node_modules/.bin/webtorrent "${torrent.replace('\n', '')}" ${webtorrentOptions.join(' ')}`, [], {
+      cwd: path.resolve ( __dirname, '..' ),
+      shell: true,
+      stdio: 'inherit'
+    });
 
   }
 

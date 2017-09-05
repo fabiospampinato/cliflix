@@ -36,38 +36,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var execa = require("execa");
 var parseTorrent = require("parse-torrent");
 var path = require("path");
 var TorrentSearch = require("torrent-search-api");
+var opensubtitles = require("subtitler");
 var config_1 = require("./config");
 var utils_1 = require("./utils");
+var child_process = require("child_process");
 /* WATCH */
 var Watch = {
     wizard: function (webtorrentOptions) {
         if (webtorrentOptions === void 0) { webtorrentOptions = []; }
         return __awaiter(this, void 0, void 0, function () {
-            var query, titles, magnet, app;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var query, titles, _a, magnet, title, useSubtitles, subtitleFile, subtitleLang, app;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, utils_1.default.prompt.input('What do you want to watch?')];
                     case 1:
-                        query = _a.sent();
+                        query = _b.sent();
                         return [4 /*yield*/, Watch.getTitles(query)];
                     case 2:
-                        titles = _a.sent();
+                        titles = _b.sent();
                         if (!titles.length)
                             return [2 /*return*/, console.error("No titles found for \"" + query + "\"")];
                         return [4 /*yield*/, utils_1.default.prompt.title('Which title?', titles)];
                     case 3:
-                        magnet = (_a.sent()).magnet;
-                        if (!!utils_1.default.webtorrent.options.isAppSet(webtorrentOptions)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, utils_1.default.prompt.list('Which app?', config_1.default.outputs)];
+                        _a = _b.sent(), magnet = _a.magnet, title = _a.title;
+                        return [4 /*yield*/, utils_1.default.prompt.yesOrNo('Do you want to watch with subtitles?')];
                     case 4:
-                        app = _a.sent();
-                        webtorrentOptions = utils_1.default.webtorrent.options.setApp(webtorrentOptions, app);
-                        _a.label = 5;
+                        useSubtitles = _b.sent();
+                        subtitleFile = '';
+                        if (!useSubtitles) return [3 /*break*/, 7];
+                        return [4 /*yield*/, utils_1.default.prompt.input('What language do you want your subtitles to be in?')];
                     case 5:
+                        subtitleLang = _b.sent();
+                        return [4 /*yield*/, Watch.getSubtitles(title, subtitleLang)];
+                    case 6:
+                        // check if lang is correct
+                        subtitleFile = _b.sent();
+                        if (!subtitleFile)
+                            return [2 /*return*/, console.error("No subtitles found for \"" + title + "\"")];
+                        webtorrentOptions.push("--subtitles " + subtitleFile);
+                        _b.label = 7;
+                    case 7:
+                        if (!!utils_1.default.webtorrent.options.isAppSet(webtorrentOptions)) return [3 /*break*/, 9];
+                        return [4 /*yield*/, utils_1.default.prompt.list('Which app?', config_1.default.outputs)];
+                    case 8:
+                        app = _b.sent();
+                        webtorrentOptions = utils_1.default.webtorrent.options.setApp(webtorrentOptions, app);
+                        _b.label = 9;
+                    case 9:
                         Watch.stream(magnet, webtorrentOptions);
                         return [2 /*return*/];
                 }
@@ -114,22 +132,42 @@ var Watch = {
             });
         });
     },
+    getSubtitles: function (movieName, lang) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token, results, subtitleDownloadLink, subtitlesFile;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, opensubtitles.api.login()];
+                    case 1:
+                        token = _a.sent();
+                        return [4 /*yield*/, opensubtitles.api.searchForTitle(token, lang, movieName)];
+                    case 2:
+                        results = _a.sent();
+                        if (results.length === 0 || !results[0].SubDownloadLink)
+                            return [2 /*return*/, ''];
+                        subtitleDownloadLink = results[0].SubDownloadLink;
+                        return [4 /*yield*/, utils_1.default.downloadGunzip(subtitleDownloadLink)];
+                    case 3:
+                        subtitlesFile = _a.sent();
+                        return [2 /*return*/, subtitlesFile];
+                }
+            });
+        });
+    },
     stream: function (torrent, webtorrentOptions) {
         if (webtorrentOptions === void 0) { webtorrentOptions = []; }
         return __awaiter(this, void 0, void 0, function () {
-            var execArgs, execOpts;
             return __generator(this, function (_a) {
                 webtorrentOptions = utils_1.default.webtorrent.options.parse(webtorrentOptions);
-                execArgs = ['download', torrent].concat(webtorrentOptions), execOpts = {
-                    cwd: path.resolve(__dirname, '..'),
-                    stdio: 'inherit'
-                };
-                execa.sync('webtorrent', execArgs, execOpts);
-                return [2 /*return*/];
+                return [2 /*return*/, child_process.spawn("./node_modules/.bin/webtorrent \"" + torrent.replace('\n', '') + "\" " + webtorrentOptions.join(' '), [], {
+                        cwd: path.resolve(__dirname, '..'),
+                        shell: true,
+                        stdio: 'inherit'
+                    })];
             });
         });
     }
 };
 /* EXPORT */
 exports.default = Watch;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBLFlBQVk7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFWiw2QkFBK0I7QUFDL0IsNENBQThDO0FBQzlDLDJCQUE2QjtBQUM3QixrREFBb0Q7QUFDcEQsbUNBQThCO0FBQzlCLGlDQUE0QjtBQUU1QixXQUFXO0FBRVgsSUFBTSxLQUFLLEdBQUc7SUFFTixNQUFNLFlBQUcsaUJBQWdDO1FBQWhDLGtDQUFBLEVBQUEsc0JBQWdDOzs7Ozs0QkFFL0IscUJBQU0sZUFBSyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUcsNEJBQTRCLENBQUUsRUFBQTs7d0JBQWpFLEtBQUssR0FBRyxTQUF5RDt3QkFDeEQscUJBQU0sS0FBSyxDQUFDLFNBQVMsQ0FBRyxLQUFLLENBQUUsRUFBQTs7d0JBQXhDLE1BQU0sR0FBRyxTQUErQjt3QkFFOUMsRUFBRSxDQUFDLENBQUUsQ0FBQyxNQUFNLENBQUMsTUFBTyxDQUFDOzRCQUFDLE1BQU0sZ0JBQUMsT0FBTyxDQUFDLEtBQUssQ0FBRywyQkFBd0IsS0FBSyxPQUFHLENBQUUsRUFBQzt3QkFFL0QscUJBQU0sZUFBSyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUcsY0FBYyxFQUFFLE1BQU0sQ0FBRSxFQUFBOzt3QkFBN0QsTUFBTSxHQUFJLENBQUEsU0FBbUQsQ0FBQSxPQUF2RDs2QkFFUixDQUFDLGVBQUssQ0FBQyxVQUFVLENBQUMsT0FBTyxDQUFDLFFBQVEsQ0FBRyxpQkFBaUIsQ0FBRSxFQUF4RCx3QkFBd0Q7d0JBRS9DLHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFHLFlBQVksRUFBRSxnQkFBTSxDQUFDLE9BQU8sQ0FBRSxFQUFBOzt3QkFBOUQsR0FBRyxHQUFHLFNBQXdEO3dCQUVwRSxpQkFBaUIsR0FBRyxlQUFLLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxNQUFNLENBQUcsaUJBQWlCLEVBQUUsR0FBRyxDQUFFLENBQUM7Ozt3QkFJakYsS0FBSyxDQUFDLE1BQU0sQ0FBRyxNQUFNLEVBQUUsaUJBQWlCLENBQUUsQ0FBQzs7Ozs7S0FFNUM7SUFFSyxLQUFLLFlBQUcsY0FBYyxFQUFFLGlCQUFnQztRQUFoQyxrQ0FBQSxFQUFBLHNCQUFnQzs7Ozs7Ozt3QkFNMUQsWUFBWSxDQUFHLGNBQWMsQ0FBRSxDQUFDO3dCQUVoQyxPQUFPLEdBQUcsY0FBYyxDQUFDOzs7O3dCQUlWLHFCQUFNLEtBQUssQ0FBQyxTQUFTLENBQUcsY0FBYyxFQUFFLENBQUMsQ0FBRSxFQUFBOzt3QkFBcEQsTUFBTSxHQUFHLFNBQTJDO3dCQUUxRCxFQUFFLENBQUMsQ0FBRSxDQUFDLE1BQU0sQ0FBQyxNQUFPLENBQUM7NEJBQUMsTUFBTSxnQkFBQyxPQUFPLENBQUMsS0FBSyxDQUFHLDJCQUF3QixjQUFjLE9BQUcsQ0FBRSxFQUFDO3dCQUV6RixPQUFPLEdBQUcsTUFBTSxDQUFDLENBQUMsQ0FBQyxDQUFDLE1BQU0sQ0FBQzs7NEJBSTdCLHNCQUFPLEtBQUssQ0FBQyxNQUFNLENBQUcsT0FBTyxFQUFFLGlCQUFpQixDQUFFLEVBQUM7Ozs7S0FFcEQ7SUFFSyxTQUFTLFlBQUcsS0FBSyxFQUFFLElBQXNCO1FBQXRCLHFCQUFBLEVBQUEsT0FBTyxnQkFBTSxDQUFDLFFBQVE7Ozs7Ozt3QkFFdkMsRUFBRSxHQUFHLElBQUksYUFBYSxFQUFHLENBQUM7d0JBRWhDLEVBQUUsQ0FBQyxjQUFjLENBQUcsY0FBYyxDQUFFLENBQUM7d0JBRTlCLHFCQUFNLEVBQUUsQ0FBQyxNQUFNLENBQUcsS0FBSyxFQUFFLE9BQU8sRUFBRSxJQUFJLENBQUUsRUFBQTs0QkFBL0Msc0JBQU8sU0FBd0MsRUFBQzs7OztLQUVqRDtJQUVLLE1BQU0sWUFBRyxPQUFPLEVBQUUsaUJBQWdDO1FBQWhDLGtDQUFBLEVBQUEsc0JBQWdDOzs7O2dCQUV0RCxpQkFBaUIsR0FBRyxlQUFLLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUcsaUJBQWlCLENBQUUsQ0FBQztnQkFFbkUsUUFBUSxJQUFJLFVBQVUsRUFBRSxPQUFPLFNBQUssaUJBQWlCLENBQUMsRUFDdEQsUUFBUSxHQUFHO29CQUNULEdBQUcsRUFBRSxJQUFJLENBQUMsT0FBTyxDQUFHLFNBQVMsRUFBRSxJQUFJLENBQUU7b0JBQ3JDLEtBQUssRUFBRSxTQUFTO2lCQUNqQixDQUFDO2dCQUVSLEtBQUssQ0FBQyxJQUFJLENBQUcsWUFBWSxFQUFFLFFBQVEsRUFBRSxRQUFRLENBQUUsQ0FBQzs7OztLQUVqRDtDQUVGLENBQUM7QUFFRixZQUFZO0FBRVosa0JBQWUsS0FBSyxDQUFDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBLFlBQVk7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFWiw0Q0FBOEM7QUFDOUMsMkJBQTZCO0FBQzdCLGtEQUFvRDtBQUNwRCx5Q0FBMkM7QUFDM0MsbUNBQThCO0FBQzlCLGlDQUE0QjtBQUM1Qiw2Q0FBK0M7QUFFL0MsV0FBVztBQUVYLElBQU0sS0FBSyxHQUFHO0lBRU4sTUFBTSxZQUFHLGlCQUFnQztRQUFoQyxrQ0FBQSxFQUFBLHNCQUFnQzs7Ozs7NEJBRS9CLHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFHLDRCQUE0QixDQUFFLEVBQUE7O3dCQUFqRSxLQUFLLEdBQUcsU0FBeUQ7d0JBQ3hELHFCQUFNLEtBQUssQ0FBQyxTQUFTLENBQUcsS0FBSyxDQUFFLEVBQUE7O3dCQUF4QyxNQUFNLEdBQUcsU0FBK0I7d0JBRTlDLEVBQUUsQ0FBQyxDQUFFLENBQUMsTUFBTSxDQUFDLE1BQU8sQ0FBQzs0QkFBQyxNQUFNLGdCQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUcsMkJBQXdCLEtBQUssT0FBRyxDQUFFLEVBQUM7d0JBRXRELHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFHLGNBQWMsRUFBRSxNQUFNLENBQUUsRUFBQTs7d0JBQXZFLEtBQW9CLFNBQW1ELEVBQXJFLE1BQU0sWUFBQSxFQUFFLEtBQUssV0FBQTt3QkFFQSxxQkFBTSxlQUFLLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxzQ0FBc0MsQ0FBQyxFQUFBOzt3QkFBakYsWUFBWSxHQUFHLFNBQWtFO3dCQUNuRixZQUFZLEdBQVcsRUFBRSxDQUFDOzZCQUMxQixZQUFZLEVBQVosd0JBQVk7d0JBQ08scUJBQU0sZUFBSyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUcsb0RBQW9ELENBQUUsRUFBQTs7d0JB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
