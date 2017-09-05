@@ -27,6 +27,17 @@ const Utils = {
 
   prompt: {
 
+    parseArr ( arr, favorites: string[] = [] ) {
+
+      arr = _.difference ( arr, favorites );
+
+      if ( !arr.length ) return favorites;
+      if ( !favorites.length ) return arr;
+
+      return [...favorites, new inquirer.Separator (), ...arr]; //FIXME: Proper separator width
+
+    },
+
     async confirm ( message: string, fallback = false ) {
 
       const {result} = await inquirer.prompt ({
