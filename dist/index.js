@@ -67,7 +67,7 @@ var Watch = {
                         return [4 /*yield*/, utils_1.default.prompt.yesOrNo('Do you want to watch with subtitles?')];
                     case 5:
                         useSubtitles = _a.sent();
-                        subtitleFile = "";
+                        subtitleFile = '';
                         if (!useSubtitles) return [3 /*break*/, 8];
                         return [4 /*yield*/, utils_1.default.prompt.input('What language do you want your subtitles to be in?')];
                     case 6:
@@ -130,7 +130,7 @@ var Watch = {
                     case 2:
                         results = _a.sent();
                         if (results.length === 0 || !results[0].SubDownloadLink)
-                            return [2 /*return*/, ""];
+                            return [2 /*return*/, ''];
                         subtitleDownloadLink = results[0].SubDownloadLink;
                         return [4 /*yield*/, utils_1.default.downloadGunzip(subtitleDownloadLink)];
                     case 3:
@@ -149,7 +149,7 @@ var Watch = {
                 }
                 if (subtitleFile)
                     webtorrentOptions.push("--subtitles \"" + subtitleFile + "\"");
-                return [2 /*return*/, utils_1.default.spawn("./node_modules/.bin/webtorrent \"" + magnet.replace('\n', '') + "\" " + webtorrentOptions.join(" "), { stdio: 'inherit' })];
+                return [2 /*return*/, utils_1.default.spawn("./node_modules/.bin/webtorrent \"" + magnet.replace('\n', '') + "\" " + webtorrentOptions.join(' '), { stdio: 'inherit' })];
             });
         });
     },

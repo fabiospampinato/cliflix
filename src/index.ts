@@ -24,7 +24,7 @@ const Watch = {
     if ( !magnet ) return console.error ( `No magnet found for "${title}"` );
 
     const useSubtitles = await Utils.prompt.yesOrNo('Do you want to watch with subtitles?');
-    let subtitleFile: string = "";
+    let subtitleFile: string = '';
     if (useSubtitles) {
       const subtitleLang = await Utils.prompt.input ( 'What language do you want your subtitles to be in?' );
       // check if lang is correct
@@ -64,7 +64,7 @@ const Watch = {
     const token = await opensubtitles.api.login();
     const results = await opensubtitles.api.searchForTitle(token, lang, movieName);
 
-    if (results.length === 0 || !results[0].SubDownloadLink) return "";
+    if (results.length === 0 || !results[0].SubDownloadLink) return '';
 
     const subtitleDownloadLink = results[0].SubDownloadLink;
     
@@ -81,7 +81,7 @@ const Watch = {
 
     if (subtitleFile) webtorrentOptions.push(`--subtitles "${subtitleFile}"`);
 
-    return Utils.spawn (`./node_modules/.bin/webtorrent "${magnet.replace('\n', '')}" ${webtorrentOptions.join(" ")}`, { stdio: 'inherit' } );
+    return Utils.spawn (`./node_modules/.bin/webtorrent "${magnet.replace('\n', '')}" ${webtorrentOptions.join(' ')}`, { stdio: 'inherit' } );
 
   },
 

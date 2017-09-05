@@ -13,7 +13,6 @@ import * as fs from 'fs';
 import * as zlib from 'zlib';
 import * as request from 'request';
 
-
 /* UTILS */
 temp.track(); // Delete temp files on process exit
 
