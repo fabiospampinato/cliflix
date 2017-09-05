@@ -39,12 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var config_1 = require("./config");
 var utils_1 = require("./utils");
+var opensubtitles = require("subtitler");
 /* WATCH */
 var Watch = {
     wizard: function (webtorrentOptions) {
         if (webtorrentOptions === void 0) { webtorrentOptions = []; }
         return __awaiter(this, void 0, void 0, function () {
-            var query, titles, title, index, magnet, output;
+            var query, titles, title, index, magnet, useSubtitles, subtitleFile, subtitleLang, output;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, utils_1.default.prompt.input('What do you want to watch?')];
@@ -63,14 +64,30 @@ var Watch = {
                         magnet = _a.sent();
                         if (!magnet)
                             return [2 /*return*/, console.error("No magnet found for \"" + title + "\"")];
-                        if (!!webtorrentOptions.length) return [3 /*break*/, 6];
-                        return [4 /*yield*/, utils_1.default.prompt.list('Which app?', config_1.default.outputs)];
+                        return [4 /*yield*/, utils_1.default.prompt.yesOrNo('Do you want to watch with subtitles?')];
                     case 5:
+                        useSubtitles = _a.sent();
+                        subtitleFile = "";
+                        if (!useSubtitles) return [3 /*break*/, 8];
+                        return [4 /*yield*/, utils_1.default.prompt.input('What language do you want your subtitles to be in?')];
+                    case 6:
+                        subtitleLang = _a.sent();
+                        return [4 /*yield*/, Watch.getSubtitles(title, subtitleLang)];
+                    case 7:
+                        // check if lang is correct
+                        subtitleFile = _a.sent();
+                        if (!subtitleFile)
+                            return [2 /*return*/, console.error("No subtitles found for \"" + title + "\"")];
+                        _a.label = 8;
+                    case 8:
+                        if (!!webtorrentOptions.length) return [3 /*break*/, 10];
+                        return [4 /*yield*/, utils_1.default.prompt.list('Which app?', config_1.default.outputs)];
+                    case 9:
                         output = _a.sent();
                         webtorrentOptions = ["--" + output.toLowerCase()];
-                        _a.label = 6;
-                    case 6:
-                        Watch.stream(magnet, webtorrentOptions);
+                        _a.label = 10;
+                    case 10:
+                        Watch.stream(magnet, webtorrentOptions, subtitleFile);
                         return [2 /*return*/];
                 }
             });
@@ -101,14 +118,38 @@ var Watch = {
             });
         });
     },
-    stream: function (magnet, webtorrentOptions) {
+    getSubtitles: function (movieName, lang) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token, results, subtitleDownloadLink, subtitlesFile;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, opensubtitles.api.login()];
+                    case 1:
+                        token = _a.sent();
+                        return [4 /*yield*/, opensubtitles.api.searchForTitle(token, lang, movieName)];
+                    case 2:
+                        results = _a.sent();
+                        if (results.length === 0 || !results[0].SubDownloadLink)
+                            return [2 /*return*/, ""];
+                        subtitleDownloadLink = results[0].SubDownloadLink;
+                        return [4 /*yield*/, utils_1.default.downloadGunzip(subtitleDownloadLink)];
+                    case 3:
+                        subtitlesFile = _a.sent();
+                        return [2 /*return*/, subtitlesFile];
+                }
+            });
+        });
+    },
+    stream: function (magnet, webtorrentOptions, subtitleFile) {
         if (webtorrentOptions === void 0) { webtorrentOptions = []; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (!webtorrentOptions.length) {
                     webtorrentOptions = ["--" + config_1.default.output.toLowerCase()];
                 }
-                return [2 /*return*/, utils_1.default.spawn('./node_modules/.bin/webtorrent', ['download', magnet].concat(webtorrentOptions), { stdio: 'inherit' })];
+                if (subtitleFile)
+                    webtorrentOptions.push("--subtitles \"" + subtitleFile + "\"");
+                return [2 /*return*/, utils_1.default.spawn("./node_modules/.bin/webtorrent \"" + magnet.replace('\n', '') + "\" " + webtorrentOptions.join(" "), { stdio: 'inherit' })];
             });
         });
     },
@@ -131,4 +172,4 @@ var Watch = {
 };
 /* EXPORT */
 exports.default = Watch;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsWUFBWTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFWiwwQkFBNEI7QUFDNUIsbUNBQThCO0FBQzlCLGlDQUE0QjtBQUU1QixXQUFXO0FBRVgsSUFBTSxLQUFLLEdBQUc7SUFFTixNQUFNLFlBQUcsaUJBQWdDO1FBQWhDLGtDQUFBLEVBQUEsc0JBQWdDOzs7Ozs0QkFFL0IscUJBQU0sZUFBSyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUcsNEJBQTRCLENBQUUsRUFBQTs7Z0NBQXpELFNBQXlEO3dCQUN4RCxxQkFBTSxLQUFLLENBQUMsU0FBUyxDQUFHLEtBQUssQ0FBRSxFQUFBOztpQ0FBL0IsU0FBK0I7d0JBRTlDLEVBQUUsQ0FBQyxDQUFFLENBQUMsTUFBTSxDQUFDLE1BQU8sQ0FBQzs0QkFBQyxNQUFNLGdCQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUcsMkJBQXdCLEtBQUssT0FBRyxDQUFFLEVBQUM7d0JBRWxFLHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFHLGNBQWMsRUFBRSxNQUFNLENBQUUsRUFBQTs7Z0NBQWxELFNBQWtELFVBQ2xELE1BQU0sQ0FBQyxTQUFTLENBQUcsVUFBQSxDQUFDLElBQUksT0FBQSxDQUFDLEtBQUssS0FBSyxFQUFYLENBQVcsQ0FBRTt3QkFDcEMscUJBQU0sS0FBSyxDQUFDLFNBQVMsQ0FBRyxLQUFLLEVBQUUsS0FBSyxDQUFFLEVBQUE7O2lDQUF0QyxTQUFzQzt3QkFFckQsRUFBRSxDQUFDLENBQUUsQ0FBQyxNQUFPLENBQUM7NEJBQUMsTUFBTSxnQkFBQyxPQUFPLENBQUMsS0FBSyxDQUFHLDJCQUF3QixLQUFLLE9BQUcsQ0FBRSxFQUFDOzZCQUVwRSxDQUFDLGlCQUFpQixDQUFDLE1BQU0sRUFBekIsd0JBQXlCO3dCQUViLHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFHLFlBQVksRUFBRSxnQkFBTSxDQUFDLE9BQU8sQ0FBRSxFQUFBOztpQ0FBeEQsU0FBd0Q7d0JBRXZFLGlCQUFpQixHQUFHLENBQUMsT0FBSyxNQUFNLENBQUMsV0FBVyxFQUFLLENBQUMsQ0FBQzs7O3dCQUlyRCxLQUFLLENBQUMsTUFBTSxDQUFHLE1BQU0sRUFBRSxpQkFBaUIsQ0FBRSxDQUFDOzs7OztLQUU1QztJQUVLLFNBQVMsWUFBRyxLQUFLLEVBQUUsSUFBa0I7UUFBbEIscUJBQUEsRUFBQSxPQUFPLGdCQUFNLENBQUMsSUFBSTs7Ozs7NEJBRTFCLHFCQUFNLGVBQUssQ0FBQyxJQUFJLENBQUcsdUNBQXFDLElBQUksV0FBSyxLQUFLLE9BQUcsQ0FBRSxFQUFBOztpQ0FBM0UsU0FBMkU7d0JBRTFGLHNCQUFPLE1BQU0sQ0FBQyxLQUFLLENBQUcsSUFBSSxDQUFFO2lDQUNkLE1BQU0sQ0FBRyxDQUFDLENBQUMsUUFBUSxDQUFFO2lDQUNyQixHQUFHLENBQUcsVUFBQSxLQUFLLElBQUksT0FBQSxLQUFLLENBQUMsT0FBTyxDQUFHLFNBQVMsRUFBRSxFQUFFLENBQUUsRUFBL0IsQ0FBK0IsQ0FBRSxFQUFDOzs7O0tBRWhFO0lBRUssU0FBUyxZQUFHLEtBQUssRUFBRSxLQUFTLEVBQUUsSUFBa0I7UUFBN0Isc0JBQUEsRUFBQSxTQUFTO1FBQUUscUJBQUEsRUFBQSxPQUFPLGdCQUFNLENBQUMsSUFBSTs7O2dCQUVwRCxzQkFBTyxlQUFLLENBQUMsSUFBSSxDQUFHLHVDQUFxQyxJQUFJLFdBQUssS0FBSyxXQUFLLEtBQU8sQ0FBRSxFQUFDOzs7S0FFdkY7SUFFSyxNQUFNLFlBQUcsTUFBTSxFQUFFLGlCQUFnQztRQUFoQyxrQ0FBQSxFQUFBLHNCQUFnQzs7O2dCQUVyRCxFQUFFLENBQUMsQ0FBRSxDQUFDLGlCQUFpQixDQUFDLE1BQU8sQ0FBQyxDQUFDLENBQUM7b0JBRWhDLGlCQUFpQixHQUFHLENBQUMsT0FBSyxnQkFBTSxDQUFDLE1BQU0sQ0FBQyxXQUFXLEVBQUssQ0FBQyxDQUFDO2dCQUU1RCxDQUFDO2dCQUVELHNCQUFPLGVBQUssQ0FBQyxLQUFLLENBQUcsZ0NBQWdDLEdBQUcsVUFBVSxFQUFFLE1BQU0sU0FBSyxpQkFBaUIsR0FBRyxFQUFFLEtBQUssRUFBRSxTQUFTLEVBQUUsQ0FBRSxFQUFDOzs7S0FFM0g7SUFFSyxLQUFLLFlBQUcsS0FBSyxFQUFFLGlCQUFnQztRQUFoQyxrQ0FBQSxFQUFBLHNCQUFnQzs7Ozs7NEJBRXBDLHFCQUFNLEtBQUssQ0FBQyxTQUFTLENBQUcsS0FBSyxDQUFFLEVBQUE7O2lDQUEvQixTQUErQjt3QkFFOUMsRUFBRSxDQUFDLENBQUUsQ0FBQyxNQUFPLENBQUM7NEJBQUMsTUFBTSxnQkFBQyxPQUFPLENBQUMsS0FBSyxDQUFHLDJCQUF3QixLQUFLLE9BQUcsQ0FBRSxFQUFDO3dCQUV6RSxzQkFBTyxLQUFLLENBQUMsTUFBTSxDQUFHLE1BQU0sRUFBRSxpQkFBaUIsQ0FBRSxFQUFDOzs7O0tBRW5EO0NBRUYsQ0FBQztBQUVGLFlBQVk7QUFFWixrQkFBZSxLQUFLLENBQUMifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsWUFBWTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFFWiwwQkFBNEI7QUFDNUIsbUNBQThCO0FBQzlCLGlDQUE0QjtBQUM1Qix5Q0FBMkM7QUFFM0MsV0FBVztBQUVYLElBQU0sS0FBSyxHQUFHO0lBRU4sTUFBTSxZQUFHLGlCQUFnQztRQUFoQyxrQ0FBQSxFQUFBLHNCQUFnQzs7bUVBY3pDLFlBQVk7Ozs0QkFaRixxQkFBTSxlQUFLLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBRyw0QkFBNEIsQ0FBRSxFQUFBOztnQ0FBekQsU0FBeUQ7d0JBQ3hELHFCQUFNLEtBQUssQ0FBQyxTQUFTLENBQUcsS0FBSyxDQUFFLEVBQUE7O2lDQUEvQixTQUErQjt3QkFFOUMsRUFBRSxDQUFDLENBQUUsQ0FBQyxNQUFNLENBQUMsTUFBTyxDQUFDOzRCQUFDLE1BQU0sZ0JBQUMsT0FBTyxDQUFDLEtBQUssQ0FBRywyQkFBd0IsS0FBSyxPQUFHLENBQUUsRUFBQzt3QkFFbEUscUJBQU0sZUFBSyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUcsY0FBYyxFQUFFLE1BQU0sQ0FBRSxFQUFBOztnQ0FBbEQsU0FBa0QsVUFDbEQsTUFBTSxDQUFDLFNBQVMsQ0FBRyxVQUFBLENBQUMsSUFBSSxPQUFBLENBQUMsS0FBSyxLQUFLLEVBQVgsQ0FBVyxDQUFFO3dCQUNwQyxxQkFBTSxLQUFLLENBQUMsU0FBUyxDQUFHLEtBQUssRUFBRSxLQUFLLENBQUUsRUFBQTs7aUNBQXRDLFNBQXNDO3dCQUVyRCxFQUFFLENBQUMsQ0FBRSxDQUFDLE1BQU8sQ0FBQzs0QkFBQyxNQUFNLGdCQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUcsMkJBQXdCLEtBQUssT0FBRyxDQUFFLEVBQUM7d0JBRXBELHFCQUFNLGVBQUssQ0FBQyxNQUFNLENBQUMs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

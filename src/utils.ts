@@ -8,8 +8,14 @@ import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
 import * as path from 'path';
 import * as pify from 'pify';
+import * as temp from 'temp';
+import * as fs from 'fs';
+import * as zlib from 'zlib';
+import * as request from 'request';
+
 
 /* UTILS */
+temp.track(); // Delete temp files on process exit
 
 const Utils = {
 
@@ -21,11 +27,11 @@ const Utils = {
 
   },
 
-  spawn ( command, args: string[] = [], options = {} ) {
+  spawn ( command, options = {} ) {
 
     const cwd = path.resolve ( __dirname, '..' ); // In order to properly call programs under `/node_modules/.bin`
 
-    spawn ( command, args, _.extend ( {cwd}, options ) ); //TSC: can't return
+    spawn ( command, _.extend ( {cwd, shell: true }, options ) ); //TSC: can't return
 
   },
 
@@ -80,8 +86,38 @@ const Utils = {
 
       return result;
 
+    },
+
+    async yesOrNo ( message, fallback? ): Promise<Boolean> {
+      const result: String = await Utils.prompt.list(message, ['yes', 'no'], fallback);
+
+      return result === 'yes';
     }
 
+  },
+
+  async generateTempFile(options: Object = {}): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      temp.open(options, (err, { path: tempFile }) => {
+        if (err) return reject(err);
+
+        return resolve(tempFile);
+      });
+    });
+  },
+
+  async downloadGunzip(url: string): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      const tempFile = await Utils.generateTempFile();
+        request(url)
+          .pipe(zlib.createGunzip())
+          .pipe(
+            fs
+              .createWriteStream(tempFile)
+              .on('finish', () => resolve(tempFile))
+              .on('error', (err) => reject(err))
+          );
+    });
   }
 
 };
