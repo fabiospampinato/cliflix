@@ -1,5 +1,5 @@
-/* IMPORT */
 "use strict";
+/* IMPORT */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var caporal = require("caporal");
 var readPkg = require("read-pkg-up");
+var updateNotifier = require("update-notifier");
 var utils_1 = require("./utils");
 var _1 = require(".");
 /* CLI */
@@ -53,20 +54,21 @@ function CLI() {
                     pkg = (_a.sent()).pkg;
                     caporal
                         .version(pkg.version)
-                        .argument('[title]', 'Video title')
+                        .argument('[title|torrent]', 'Video title or torrent identifier')
                         .argument('[-- webtorrent options...]', 'WebTorrent options')
                         .action(function (args) { return __awaiter(_this, void 0, void 0, function () {
-                        var doubleDashIndex, hasWebtorrentOptions, title, webtorrentOptions;
+                        var doubleDashIndex, hasWebtorrentOptions, titleOrTorrent, webtorrentOptions;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, utils_1.default.checkConnection()];
                                 case 1:
                                     _a.sent();
+                                    updateNotifier({ pkg: pkg }).notify();
                                     args = _.castArray(args.title || []).concat(args.webtorrentOptions);
-                                    doubleDashIndex = args.findIndex(function (x) { return x === '--'; }), hasWebtorrentOptions = (doubleDashIndex >= 0), title = hasWebtorrentOptions ? args.slice(0, doubleDashIndex).join(' ') : args.join(' '), webtorrentOptions = hasWebtorrentOptions ? args.slice(doubleDashIndex + 1) : [];
-                                    if (!title)
+                                    doubleDashIndex = args.findIndex(function (x) { return x === '--'; }), hasWebtorrentOptions = (doubleDashIndex >= 0), titleOrTorrent = hasWebtorrentOptions ? args.slice(0, doubleDashIndex).join(' ') : args.join(' '), webtorrentOptions = hasWebtorrentOptions ? args.slice(doubleDashIndex + 1) : [];
+                                    if (!titleOrTorrent)
                                         return [2 /*return*/, _1.default.wizard(webtorrentOptions)];
-                                    return [2 /*return*/, _1.default.lucky(title, webtorrentOptions)];
+                                    return [2 /*return*/, _1.default.lucky(titleOrTorrent, webtorrentOptions)];
                             }
                         });
                     }); });
@@ -78,4 +80,4 @@ function CLI() {
 }
 /* EXPORT */
 exports.default = CLI;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2NsaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQSxZQUFZOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUVaLDBCQUE0QjtBQUM1QixpQ0FBbUM7QUFDbkMscUNBQXVDO0FBQ3ZDLGlDQUE0QjtBQUM1QixzQkFBc0I7QUFFdEIsU0FBUztBQUVUOzs7Ozs7d0JBRWdCLHFCQUFNLE9BQU8sQ0FBRSxFQUFFLEdBQUcsRUFBRSxTQUFTLEVBQUUsQ0FBQyxFQUFBOzswQkFBbEMsQ0FBQSxTQUFrQyxDQUFBO29CQUVoRCxPQUFPO3lCQUNKLE9BQU8sQ0FBRyxHQUFHLENBQUMsT0FBTyxDQUFFO3lCQUN2QixRQUFRLENBQUcsU0FBUyxFQUFFLGFBQWEsQ0FBRTt5QkFDckMsUUFBUSxDQUFHLDRCQUE0QixFQUFFLG9CQUFvQixDQUFFO3lCQUMvRCxNQUFNLENBQUcsVUFBUSxJQUFJOzRCQU1kLGVBQWUsRUFDZixvQkFBb0IsRUFDcEIsS0FBSyxFQUNMLGlCQUFpQjs7O3dDQVB2QixxQkFBTSxlQUFLLENBQUMsZUFBZSxFQUFHLEVBQUE7O29DQUE5QixTQUE4QixDQUFDO29DQUUvQixJQUFJLEdBQUcsQ0FBQyxDQUFDLFNBQVMsQ0FBRyxJQUFJLENBQUMsS0FBSyxJQUFJLEVBQUUsQ0FBRSxDQUFDLE1BQU0sQ0FBRyxJQUFJLENBQUMsaUJBQWlCLENBQUUsQ0FBQztzREFFbEQsSUFBSSxDQUFDLFNBQVMsQ0FBRyxVQUFBLENBQUMsSUFBSSxPQUFBLENBQUMsS0FBSyxJQUFJLEVBQVYsQ0FBVSxDQUFFLHlCQUM3QixDQUFFLGVBQWUsSUFBSSxDQUFDLENBQUUsVUFDdkMsb0JBQW9CLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBRyxDQUFDLEVBQUUsZUFBZSxDQUFFLENBQUMsSUFBSSxDQUFHLEdBQUcsQ0FBRSxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUcsR0FBRyxDQUFFLHNCQUM3RSxvQkFBb0IsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFHLGVBQWUsR0FBRyxDQUFDLENBQUUsR0FBRyxFQUFFO29DQUV4RixFQUFFLENBQUMsQ0FBRSxDQUFDLEtBQU0sQ0FBQzt3Q0FBQyxNQUFNLGdCQUFDLFVBQUssQ0FBQyxNQUFNLENBQUcsaUJBQWlCLENBQUUsRUFBQztvQ0FFeEQsc0JBQU8sVUFBSyxDQUFDLEtBQUssQ0FBRyxLQUFLLEVBQUUsaUJBQWlCLENBQUUsRUFBQzs7O3lCQUVqRCxDQUFDLENBQUM7b0JBRUwsT0FBTyxDQUFDLEtBQUssQ0FBRyxPQUFPLENBQUMsSUFBSSxDQUFFLENBQUM7Ozs7O0NBRWhDO0FBRUQsWUFBWTtBQUVaLGtCQUFlLEdBQUcsQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2NsaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQ0EsWUFBWTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUVaLDBCQUE0QjtBQUM1QixpQ0FBbUM7QUFDbkMscUNBQXVDO0FBQ3ZDLGdEQUFrRDtBQUNsRCxpQ0FBNEI7QUFDNUIsc0JBQXNCO0FBRXRCLFNBQVM7QUFFVDs7Ozs7O3dCQUVnQixxQkFBTSxPQUFPLENBQUUsRUFBRSxHQUFHLEVBQUUsU0FBUyxFQUFFLENBQUMsRUFBQTs7b0JBQXpDLEdBQUcsR0FBSSxDQUFBLFNBQWtDLENBQUEsSUFBdEM7b0JBRVYsT0FBTzt5QkFDSixPQUFPLENBQUcsR0FBRyxDQUFDLE9BQU8sQ0FBRTt5QkFDdkIsUUFBUSxDQUFHLGlCQUFpQixFQUFFLG1DQUFtQyxDQUFFO3lCQUNuRSxRQUFRLENBQUcsNEJBQTRCLEVBQUUsb0JBQW9CLENBQUU7eUJBQy9ELE1BQU0sQ0FBRyxVQUFRLElBQUk7Ozs7d0NBRXBCLHFCQUFNLGVBQUssQ0FBQyxlQUFlLEVBQUcsRUFBQTs7b0NBQTlCLFNBQThCLENBQUM7b0NBRS9CLGNBQWMsQ0FBRSxFQUFFLEdBQUcsS0FBQSxFQUFFLENBQUMsQ0FBQyxNQUFNLEVBQUcsQ0FBQztvQ0FFbkMsSUFBSSxHQUFHLENBQUMsQ0FBQyxTQUFTLENBQUcsSUFBSSxDQUFDLEtBQUssSUFBSSxFQUFFLENBQUUsQ0FBQyxNQUFNLENBQUcsSUFBSSxDQUFDLGlCQUFpQixDQUFFLENBQUM7b0NBRXBFLGVBQWUsR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFHLFVBQUEsQ0FBQyxJQUFJLE9BQUEsQ0FBQyxLQUFLLElBQUksRUFBVixDQUFVLENBQUUsRUFDcEQsb0JBQW9CLEdBQUcsQ0FBRSxlQUFlLElBQUksQ0FBQyxDQUFFLEVBQy9DLGNBQWMsR0FBRyxvQkFBb0IsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFHLENBQUMsRUFBRSxlQUFlLENBQUUsQ0FBQyxJQUFJLENBQUcsR0FBRyxDQUFFLEdBQUcsSUFBSSxDQUFDLElBQUksQ0FBRyxHQUFHLENBQUUsRUFDMUcsaUJBQWlCLEdBQUcsb0JBQW9CLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBRyxlQUFlLEdBQUcsQ0FBQyxDQUFFLEdBQUcsRUFBRSxDQUFDO29DQUV6RixFQUFFLENBQUMsQ0FBRSxDQUFDLGNBQWUsQ0FBQzt3Q0FBQyxNQUFNLGdCQUFDLFVBQUssQ0FBQyxNQUFNLENBQUcsaUJBQWlCLENBQUUsRUFBQztvQ0FFakUsc0JBQU8sVUFBSyxDQUFDLEtBQUssQ0FBRyxjQUFjLEVBQUUsaUJBQWlCLENBQUUsRUFBQzs7O3lCQUUxRCxDQUFDLENBQUM7b0JBRUwsT0FBTyxDQUFDLEtBQUssQ0FBRyxPQUFPLENBQUMsSUFBSSxDQUFFLENBQUM7Ozs7O0NBRWhDO0FBRUQsWUFBWTtBQUVaLGtCQUFlLEdBQUcsQ0FBQyJ9

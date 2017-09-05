@@ -2,9 +2,16 @@
 /* CONFIG */
 
 const Config = {
-  rows: 10,
-  outputs: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'OMXPlayer', 'VLC', 'IINA', 'XBMC'],
-  output: 'VLC'
+  listNr: 10,
+  searchNr: 30,
+  outputs: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'VLC', 'IINA', 'XBMC'],
+  output: 'VLC',
+  details: {
+    seeders: true,
+    leechers: true,
+    size: true,
+    time: false
+  }
 };
 
 /* EXPORT */
