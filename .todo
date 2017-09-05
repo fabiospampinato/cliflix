@@ -1,13 +1,14 @@
 
 Now:
-  ☐ Don't query the search engine twice (once for the titles, and the second time for the magnet)
-  ☐ Provide seeders/leechers count
+  ☐ Populate the `engine` key of package.json @high @1h
 
 Next:
-  ☐ Properly detect default app
-  ☐ Save files under ~/Downloads
+  ☐ Properly detect default app @2h
+  ☐ Save files under ~/Downloads @1h
 
 Future:
-  ☐ Add settings, so that we can default to a specific app
-  ☐ Add supports for subtitles
+  ☐ Add settings, so that we can default to a specific app @30m
+  ☐ Add support for setting the favorite torrent providers (perhaps TPB is blocked or something)
+  ☐ Add ability to close the shell while still keeping the stream on
+  ☐ Add support for subtitles @1h
   ☐ Add an alfred workflow

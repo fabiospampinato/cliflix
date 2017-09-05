@@ -1,7 +1,10 @@
 
 /* IMPORT */
 
-import * as _ from 'lodash';
+import * as execa from 'execa';
+import * as parseTorrent from 'parse-torrent';
+import * as path from 'path';
+import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
 
@@ -16,17 +19,13 @@ const Watch = {
 
     if ( !titles.length ) return console.error ( `No titles found for "${query}"` );
 
-    const title = await Utils.prompt.list ( 'Which title?', titles ),
-          index = titles.findIndex ( t => t === title ),
-          magnet = await Watch.getMagnet ( query, index );
+    const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
 
-    if ( !magnet ) return console.error ( `No magnet found for "${title}"` );
+    if ( !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
 
-    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
+      const app = await Utils.prompt.list ( 'Which app?', Config.outputs );
 
-      const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
-
-      webtorrentOptions = [`--${output.toLowerCase ()}`];
+      webtorrentOptions = Utils.webtorrent.options.setApp ( webtorrentOptions, app );
 
     }
 
@@ -34,41 +33,51 @@ const Watch = {
 
   },
 
-  async getTitles ( query, rows = Config.rows ) {
+  async lucky ( queryOrTorrent, webtorrentOptions: string[] = [] ) {
 
-    const titles = await Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}"` );
+    let torrent;
 
-    return titles.split ( '\n' )
-                 .filter ( _.identity )
-                 .map ( title => title.replace ( /\d+:\s+/, '' ) );
+    try {
 
-  },
+      parseTorrent ( queryOrTorrent );
 
-  async getMagnet ( query, index = 1, rows = Config.rows ) {
+      torrent = queryOrTorrent;
 
-    return Utils.exec ( `./node_modules/.bin/magnet --rows ${rows} "${query}" ${index}` );
+    } catch ( e ) {
 
-  },
+      const titles = await Watch.getTitles ( queryOrTorrent, 1 );
 
-  async stream ( magnet, webtorrentOptions: string[] = [] ) {
+      if ( !titles.length ) return console.error ( `No titles found for "${queryOrTorrent}"` );
 
-    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
-
-      webtorrentOptions = [`--${Config.output.toLowerCase ()}`];
+      torrent = titles[0].magnet;
 
     }
 
-    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { stdio: 'inherit' } );
+    return Watch.stream ( torrent, webtorrentOptions );
 
   },
 
-  async lucky ( query, webtorrentOptions: string[] = [] ) {
+  async getTitles ( query, rows = Config.searchNr ) {
 
-    const magnet = await Watch.getMagnet ( query );
+    const ts = new TorrentSearch ();
 
-    if ( !magnet ) return console.error ( `No magnet found for "${query}"` );
+    ts.enableProvider ( 'ThePirateBay' );
 
-    return Watch.stream ( magnet, webtorrentOptions );
+    return await ts.search ( query, 'Video', rows );
+
+  },
+
+  async stream ( torrent, webtorrentOptions: string[] = [] ) {
+
+    webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
+
+    const execArgs = ['download', torrent, ...webtorrentOptions],
+          execOpts = {
+            cwd: path.resolve ( __dirname, '..' ),
+            stdio: 'inherit'
+          };
+
+    execa.sync ( 'webtorrent', execArgs, execOpts );
 
   }
 
