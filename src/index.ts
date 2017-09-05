@@ -24,7 +24,7 @@ const Watch = {
 
     if ( Config.subtitles.enabled && !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
 
-      const subbed = await Utils.prompt.confirm ( 'Do you want subtitles?' );
+      const subbed = await Utils.prompt.noYes ( 'Do you want subtitles?' );
 
       if ( subbed ) {
 
@@ -34,7 +34,7 @@ const Watch = {
 
         if ( !subtitlesAll.length ) {
 
-          const okay = await Utils.prompt.confirm ( `No subtitles found for "${languageName}", play it anyway?` );
+          const okay = await Utils.prompt.noYes ( `No subtitles found for "${languageName}", play it anyway?` );
 
           if ( !okay ) return;
 

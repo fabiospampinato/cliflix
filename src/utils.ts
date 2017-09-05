@@ -51,6 +51,12 @@ const Utils = {
 
     },
 
+    async noYes ( message: string ) {
+
+      return await Utils.prompt.list ( message, ['No', 'Yes'] ) === 'Yes';
+
+    },
+
     async input ( message, fallback? ) {
 
       const {result} = await inquirer.prompt ({
