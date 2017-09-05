@@ -1,4 +1,9 @@
 
+/* IMPORT */
+
+import * as _ from 'lodash';
+import * as localeCode from 'locale-code';
+import * as osLocale from 'os-locale';
 
 /* CONFIG */
 
@@ -33,6 +38,22 @@ const Config = {
     rows: 10
   }
 };
+
+/* INIT */
+
+function initLocale () {
+
+  const locale = osLocale.sync ().replace ( '_', '-' ),
+        languageName = localeCode.getLanguageName ( locale ),
+        language = Config.subtitles.languages.available.find ( language => language.startsWith ( languageName ) );
+
+  if ( !language ) return;
+
+  Config.subtitles.languages.favorites = _.uniq ([ language, ...Config.subtitles.languages.favorites ]);
+
+}
+
+initLocale ();
 
 /* EXPORT */
 
