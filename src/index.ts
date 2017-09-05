@@ -28,7 +28,7 @@ const Watch = {
 
       if ( subbed ) {
 
-        const languageName = await Utils.prompt.list ( 'Which language?', Config.subtitles.languages ),
+        const languageName = await Utils.prompt.list ( 'Which language?', Config.subtitles.languages.available ),
               languageCode = Utils.language.getCode ( languageName ),
               subtitlesAll = await Watch.getSubtitles ( query, languageCode );
 
@@ -53,7 +53,7 @@ const Watch = {
 
     if ( !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
 
-      const app = await Utils.prompt.list ( 'Which app?', Config.outputs );
+      const app = await Utils.prompt.list ( 'Which app?', Config.outputs.available );
 
       webtorrentOptions = Utils.webtorrent.options.setApp ( webtorrentOptions, app );
 
@@ -87,7 +87,7 @@ const Watch = {
 
   },
 
-  async getTorrents ( query, rows = Config.searchNr ) {
+  async getTorrents ( query, rows = Config.torrents.limit ) {
 
     try {
 
@@ -109,10 +109,10 @@ const Watch = {
 
     try {
 
-      const OS = new OpenSubtitles ( Config.opensubtitles.userAgent );
+      const OS = new OpenSubtitles ( Config.subtitles.opensubtitles.userAgent );
       const results = await OS.search ({
         sublanguageid: language,
-        limit: Config.subtitlesNr,
+        limit: Config.subtitles.limit,
         query
       });
 

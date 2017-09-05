@@ -56,13 +56,13 @@ const Utils = {
 
     async list ( message, arr, fallback? ) {
 
-      if ( arr.length > Config.listNr ) arr.push ( new inquirer.Separator ( '\n' ) );
+      if ( arr.length > Config.inquirer.rows ) arr.push ( new inquirer.Separator ( '\n' ) );
 
       const {result} = await inquirer.prompt ({
         type: 'list',
         name: 'result',
         choices: arr,
-        pageSize: Config.listNr,
+        pageSize: Config.inquirer.rows,
         message,
         default: fallback,
         validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && x.trim () )
@@ -86,10 +86,10 @@ const Utils = {
 
         row.push ( truncate ( Utils.torrent.parseTitle ( title.title ), maxWidth ) );
 
-        if ( Config.details.seeders ) row.push ( `${title.seeds}` );
-        if ( Config.details.leechers ) row.push ( `${title.peers}` );
-        if ( Config.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
-        if ( Config.details.time ) row.push ( title.time );
+        if ( Config.torrents.details.seeders ) row.push ( `${title.seeds}` );
+        if ( Config.torrents.details.leechers ) row.push ( `${title.peers}` );
+        if ( Config.torrents.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
+        if ( Config.torrents.details.time ) row.push ( title.time );
 
         table.push ( row );
 
@@ -223,7 +223,7 @@ const Utils = {
 
       isAppSet ( options: string[] ) {
 
-        const appRe = new RegExp ( `^--(${Config.outputs.join ( '|' )})$`, 'i' );
+        const appRe = new RegExp ( `^--(${Config.outputs.supported.join ( '|' )})$`, 'i' );
 
         return Utils.webtorrent.options.isOptionSet ( options, appRe );
 
@@ -259,7 +259,7 @@ const Utils = {
 
         if ( !Utils.webtorrent.options.isAppSet ( options ) ) {
 
-          options = Utils.webtorrent.options.setApp ( options, Config.output );
+          options = Utils.webtorrent.options.setApp ( options, Config.outputs.favorites[0] );
 
         }
 
