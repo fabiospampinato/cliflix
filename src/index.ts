@@ -4,7 +4,6 @@
 import * as _ from 'lodash';
 import Config from './config';
 import Utils from './utils';
-import * as opensubtitles from 'subtitler';
 
 /* WATCH */
 
@@ -23,15 +22,6 @@ const Watch = {
 
     if ( !magnet ) return console.error ( `No magnet found for "${title}"` );
 
-    const useSubtitles = await Utils.prompt.yesOrNo('Do you want to watch with subtitles?');
-    let subtitleFile: string = "";
-    if (useSubtitles) {
-      const subtitleLang = await Utils.prompt.input ( 'What language do you want your subtitles to be in?' );
-      // check if lang is correct
-      subtitleFile = await Watch.getSubtitles(title, subtitleLang);
-      if ( !subtitleFile ) return console.error ( `No subtitles found for "${title}"` );
-    }
-
     if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
 
       const output = await Utils.prompt.list ( 'Which app?', Config.outputs );
@@ -40,7 +30,7 @@ const Watch = {
 
     }
 
-    Watch.stream ( magnet, webtorrentOptions, subtitleFile );
+    Watch.stream ( magnet, webtorrentOptions );
 
   },
 
@@ -60,28 +50,15 @@ const Watch = {
 
   },
 
-  async getSubtitles (movieName, lang) {
-    const token = await opensubtitles.api.login();
-    const results = await opensubtitles.api.searchForTitle(token, lang, movieName);
+  async stream ( magnet, webtorrentOptions: string[] = [] ) {
 
-    if (results.length === 0 || !results[0].SubDownloadLink) return "";
+    if ( !webtorrentOptions.length ) { //FIXME: Actually check if an `--{app}` switch has been passed
 
-    const subtitleDownloadLink = results[0].SubDownloadLink;
-    
-    const subtitlesFile = await Utils.downloadGunzip(subtitleDownloadLink);
-    return subtitlesFile;
-  },
+      webtorrentOptions = [`--${Config.output.toLowerCase ()}`];
 
-  async stream ( magnet, webtorrentOptions: string[] = [], subtitleFile?: string ) {
-
-    if (!webtorrentOptions.length) { //FIXME: Actually check if an `--{app}` switch has been passed
-
-        webtorrentOptions = [`--${Config.output.toLowerCase()}`];
     }
 
-    if (subtitleFile) webtorrentOptions.push(`--subtitles "${subtitleFile}"`);
-
-    return Utils.spawn (`./node_modules/.bin/webtorrent "${magnet.replace('\n', '')}" ${webtorrentOptions.join(" ")}`, { stdio: 'inherit' } );
+    return Utils.spawn ( './node_modules/.bin/webtorrent', ['download', magnet, ...webtorrentOptions], { stdio: 'inherit' } );
 
   },
 

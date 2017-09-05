@@ -40,9 +40,6 @@
     "open": "0.0.5",
     "pify": "^3.0.0",
     "read-pkg-up": "^2.0.0",
-    "request": "^2.81.0",
-    "subtitler": "^2.6.0",
-    "temp": "^0.8.3",
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-support"
   },
   "devDependencies": {
