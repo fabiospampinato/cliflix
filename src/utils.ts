@@ -9,6 +9,8 @@ import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
 import * as prettySize from 'prettysize';
+import * as request from 'request-promise-native';
+import * as temp from 'temp';
 import Config from './config';
 
 /* UTILS */
@@ -141,6 +143,17 @@ const Utils = {
 
       return await Utils.prompt.list ( message, list );
 
+    },
+
+    async subtitles ( message, subtitles ) { //TODO
+
+      const list = subtitles.map ( subtitle => ({
+        name: Utils.subtitles.parseTitle ( subtitle.filename ),
+        value: subtitle
+      }));
+
+      return Utils.prompt.list ( 'Which subtitles?', list );
+
     }
 
   },
@@ -174,22 +187,67 @@ const Utils = {
 
   },
 
+  subtitles: {
+
+    parseTitle ( title ) {
+
+      return title.replace ( /\.srt$/i, '' ); // Extension
+
+    },
+
+    async download ( url ) {
+
+      temp.track ();
+
+      const content = await request ( url ),
+            stream = temp.createWriteStream ();
+
+      stream.write ( content );
+      stream.end ();
+
+      return stream;
+
+    }
+
+  },
+
   webtorrent: {
 
     options: {
 
+      isOptionSet ( options: string[], regex ) {
+
+        return !!options.find ( option => !!option.match ( regex ) );
+
+      },
+
       isAppSet ( options: string[] ) {
 
-        const appRe = new RegExp ( `^--(${Config.outputs.join ( '|' )})$`, 'i' ),
-              isAppSet = !!options.find ( option => !!option.match ( appRe ) );
+        const appRe = new RegExp ( `^--(${Config.outputs.join ( '|' )})$`, 'i' );
 
-        return isAppSet;
+        return Utils.webtorrent.options.isOptionSet ( options, appRe );
+
+      },
+
+      isSubtitlesSet ( options: string[] ) {
+
+        const subtitlesRe = /--subtitles/i;
+
+        return Utils.webtorrent.options.isOptionSet ( options, subtitlesRe );
 
       },
 
       setApp ( options: string[], app: string ) {
 
         options.push ( `--${app.toLowerCase ()}` );
+
+        return options;
+
+      },
+
+      setSubtitles ( options: string[], subtitles: string ) {
+
+        options.push ( `--subtitles`, subtitles );
 
         return options;
 
@@ -210,6 +268,29 @@ const Utils = {
         return options;
 
       }
+
+    }
+
+  },
+
+  language: {
+
+    codes: ['afr', 'alb', 'ara', 'arm', 'ast', 'aze', 'baq', 'bel', 'ben', 'bos', 'bre', 'bul', 'bur', 'cat', 'chi', 'zht', 'zhe', 'hrv', 'cze', 'dan', 'dut', 'eng', 'epo', 'est', 'ext', 'fin', 'fre', 'glg', 'geo', 'ger', 'ell', 'heb', 'hin', 'hun', 'ice', 'ind', 'ita', 'jpn', 'kan', 'kaz', 'khm', 'kor', 'kur', 'lav', 'lit', 'ltz', 'mac', 'may', 'mal', 'mni', 'mon', 'mne', 'nor', 'oci', 'per', 'pol', 'por', 'pob', 'pom', 'rum', 'rus', 'scc', 'sin', 'slo', 'slv', 'spa', 'swa', 'swe', 'syr', 'tgl', 'tam', 'tel', 'tha', 'tur', 'ukr', 'urd', 'vie'],
+    names: ['Afrikaans', 'Albanian', 'Arabic', 'Armenian', 'Asturian', 'Azerbaijani', 'Basque', 'Belarusian', 'Bengali', 'Bosnian', 'Breton', 'Bulgarian', 'Burmese', 'Catalan', 'Chinese (simplified)', 'Chinese (traditional)', 'Chinese bilingual', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Esperanto', 'Estonian', 'Extremaduran', 'Finnish', 'French', 'Galician', 'Georgian', 'German', 'Greek', 'Hebrew', 'Hindi', 'Hungarian', 'Icelandic', 'Indonesian', 'Italian', 'Japanese', 'Kannada', 'Kazakh', 'Khmer', 'Korean', 'Kurdish', 'Latvian', 'Lithuanian', 'Luxembourgish', 'Macedonian', 'Malay', 'Malayalam', 'Manipuri', 'Mongolian', 'Montenegrin', 'Norwegian', 'Occitan', 'Persian', 'Polish', 'Portuguese', 'Portuguese (BR)', 'Portuguese (MZ)', 'Romanian', 'Russian', 'Serbian', 'Sinhalese', 'Slovak', 'Slovenian', 'Spanish', 'Swahili', 'Swedish', 'Syriac', 'Tagalog', 'Tamil', 'Telugu', 'Thai', 'Turkish', 'Ukrainian', 'Urdu', 'Vietnamese'],
+
+    getCode ( name ) {
+
+      const {codes, names} = Utils.language;
+
+      return codes[_.indexOf ( names, name )];
+
+    },
+
+    getName ( code ) {
+
+      const {codes, names} = Utils.language;
+
+      return names[_.indexOf ( codes, code )];
 
     }
 
