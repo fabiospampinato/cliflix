@@ -9,6 +9,10 @@ import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
 import * as isOnline from 'is-online';
 import * as prettySize from 'prettysize';
+import * as temp from 'temp';
+import * as fs from 'fs';
+import * as zlib from 'zlib';
+import * as request from 'request';
 import Config from './config';
 
 /* UTILS */
@@ -141,6 +145,12 @@ const Utils = {
 
       return await Utils.prompt.list ( message, list );
 
+    },
+
+    async yesOrNo ( message, fallback? ): Promise<Boolean> {
+      const result: String = await Utils.prompt.list(message, ['yes', 'no'], fallback);
+
+      return result === 'yes';
     }
 
   },
@@ -213,6 +223,30 @@ const Utils = {
 
     }
 
+  },
+
+  async generateTempFile(options: Object = {}): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      temp.open(options, (err, { path: tempFile }) => {
+        if (err) return reject(err);
+
+        return resolve(tempFile);
+      });
+    });
+  },
+
+  async downloadGunzip(url: string): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      const tempFile = await Utils.generateTempFile();
+        request(url)
+          .pipe(zlib.createGunzip())
+          .pipe(
+            fs
+              .createWriteStream(tempFile)
+              .on('finish', () => resolve(tempFile))
+              .on('error', (err) => reject(err))
+          );
+    });
   }
 
 };

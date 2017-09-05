@@ -43,6 +43,8 @@
     "parse-torrent": "^5.8.3",
     "prettysize": "^0.1.0",
     "read-pkg-up": "^2.0.0",
+    "subtitler": "^2.6.0",
+    "temp": "^0.8.3",
     "torrent-search-api": "^1.0.15",
     "update-notifier": "^2.2.0",
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-support"
