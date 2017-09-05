@@ -72,7 +72,7 @@ const Utils = {
 
     async title ( message, titles ) {
 
-      const maxWidth = cliWidth () - 6; // Accounting for inquirer's characters too
+      const maxWidth = cliWidth ({ defaultWidth: 80 }) - 6; // Accounting for inquirer's characters too
 
       /* TABLE */
 
