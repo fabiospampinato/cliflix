@@ -16,7 +16,7 @@ async function CLI () {
 
   caporal
     .version ( pkg.version )
-    .argument ( '[title]', 'Video title' )
+    .argument ( '[title|torrent]', 'Video title or torrent identifier' )
     .argument ( '[-- webtorrent options...]', 'WebTorrent options' )
     .action ( async ( args ) => {
 
@@ -28,12 +28,12 @@ async function CLI () {
 
       const doubleDashIndex = args.findIndex ( x => x === '--' ),
             hasWebtorrentOptions = ( doubleDashIndex >= 0 ),
-            title = hasWebtorrentOptions ? args.slice ( 0, doubleDashIndex ).join ( ' ' ) : args.join ( ' ' ),
+            titleOrTorrent = hasWebtorrentOptions ? args.slice ( 0, doubleDashIndex ).join ( ' ' ) : args.join ( ' ' ),
             webtorrentOptions = hasWebtorrentOptions ? args.slice ( doubleDashIndex + 1 ) : [];
 
-      if ( !title ) return Watch.wizard ( webtorrentOptions );
+      if ( !titleOrTorrent ) return Watch.wizard ( webtorrentOptions );
 
-      return Watch.lucky ( title, webtorrentOptions );
+      return Watch.lucky ( titleOrTorrent, webtorrentOptions );
 
     });
 

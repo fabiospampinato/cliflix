@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import * as execa from 'execa';
+import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
@@ -32,15 +33,27 @@ const Watch = {
 
   },
 
-  async lucky ( query, webtorrentOptions: string[] = [] ) {
+  async lucky ( queryOrTorrent, webtorrentOptions: string[] = [] ) {
 
-    const titles = await Watch.getTitles ( query, 1 );
+    let torrent;
 
-    if ( !titles.length ) return console.error ( `No titles found for "${query}"` );
+    try {
 
-    const {magnet} = titles[0];
+      parseTorrent ( queryOrTorrent );
 
-    return Watch.stream ( magnet, webtorrentOptions );
+      torrent = queryOrTorrent;
+
+    } catch ( e ) {
+
+      const titles = await Watch.getTitles ( queryOrTorrent, 1 );
+
+      if ( !titles.length ) return console.error ( `No titles found for "${queryOrTorrent}"` );
+
+      torrent = titles[0].magnet;
+
+    }
+
+    return Watch.stream ( torrent, webtorrentOptions );
 
   },
 
