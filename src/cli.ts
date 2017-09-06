@@ -24,16 +24,16 @@ async function CLI () {
 
       updateNotifier ({ pkg }).notify ();
 
-      args = _.castArray ( args.title || [] ).concat ( args.webtorrentOptions );
+      args = _.castArray ( args.titleTorrent || [] ).concat ( args.webtorrentOptions );
 
       const doubleDashIndex = args.findIndex ( x => x === '--' ),
             hasWebtorrentOptions = ( doubleDashIndex >= 0 ),
-            titleOrTorrent = hasWebtorrentOptions ? args.slice ( 0, doubleDashIndex ).join ( ' ' ) : args.join ( ' ' ),
+            queryOrTorrent = hasWebtorrentOptions ? args.slice ( 0, doubleDashIndex ).join ( ' ' ) : args.join ( ' ' ),
             webtorrentOptions = hasWebtorrentOptions ? args.slice ( doubleDashIndex + 1 ) : [];
 
-      if ( !titleOrTorrent ) return CLIFlix.wizard ( webtorrentOptions );
+      if ( !queryOrTorrent ) return CLIFlix.wizard ( webtorrentOptions );
 
-      return CLIFlix.lucky ( titleOrTorrent, webtorrentOptions );
+      return CLIFlix.lucky ( queryOrTorrent, webtorrentOptions );
 
     });
 
