@@ -110,7 +110,7 @@ const Watch = {
 
     try {
 
-      const OS = new OpenSubtitles ( Config.subtitles.opensubtitles.userAgent );
+      const OS = new OpenSubtitles ( Config.subtitles.opensubtitles );
       const results = await OS.search ({
         sublanguageid: language,
         limit: Config.subtitles.limit,

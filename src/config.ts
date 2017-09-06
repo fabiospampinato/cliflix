@@ -34,8 +34,10 @@ const Config = {
       favorites: ['English', 'French', 'German', 'Hindi', 'Italian', 'Japanese', 'Portuguese', 'Russian', 'Spanish']
     },
     opensubtitles: {
-      userAgent: 'My Application v0.1', //TODO: Register app
-      token: false //TODO: Implement this
+      useragent: 'My Application v0.1', //TODO: Register app
+      username: null,
+      password: null,
+      ssl: true
     }
   },
   prompt: {
