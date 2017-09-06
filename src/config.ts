@@ -2,13 +2,19 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import * as chalk from 'chalk';
+import * as fs from 'fs';
+import * as JSON5 from 'json5';
 import * as localeCode from 'locale-code';
+import * as os from 'os';
 import * as osLocale from 'os-locale';
+import * as path from 'path';
 import prompt from 'inquirer-helpers';
 
 /* CONFIG */
 
 const Config = {
+  localConfigPath: path.join ( os.homedir (), '.cliflix.json' ),
   outputs: {
     supported: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'omx', 'VLC', 'IINA', 'XBMC', 'stdout'],
     available: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'VLC', 'IINA', 'XBMC'],
@@ -67,8 +73,33 @@ function initLocale () {
 
 }
 
+function initLocalConfig () {
+
+  try {
+
+    const content = fs.readFileSync ( Config.localConfigPath, { encoding: 'utf8' } ).toString ();
+
+    if ( !content || !content.trim () ) return;
+
+    const localConfig = _.attempt ( JSON5.parse, content );
+
+    if ( _.isError ( localConfig ) ) {
+
+      console.error ( chalk.red ( `Error reading the configuration file (${Config.localConfigPath}). Is it properly formatted JSON?` ) );
+
+    } else {
+
+      _.merge ( Config, localConfig );
+
+    }
+
+  } catch ( e ) {}
+
+}
+
 initPrompt ();
 initLocale ();
+initLocalConfig ();
 
 /* EXPORT */
 

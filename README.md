@@ -45,6 +45,51 @@ cliflix -- --vlc --port 1234
 cliflix Star Wreck -- --vlc --port 1234
 ```
 
+## Configuration
+
+You can customize `cliflix` to your likings via a `~/.cliflix.json` file. `~` is the path to your home directory.
+
+These are the settings available:
+
+```json
+{
+  "outputs": { // Apps-related settings
+    "available": ["Airplay", "Chromecast", "DLNA", "MPlayer", "mpv", "VLC", "IINA", "XBMC"], // Apps to list when asking for the app
+    "favorites": ["VLC"] // Favorite apps, they will be listed before the others
+  },
+  "torrents": { // Torrents-related settings
+    "limit": 30, // Number of torrent to show
+    "details": { // Other columns to show
+      "seeders": true,
+      "leechers": true,
+      "size": true,
+      "time": false
+    }
+  },
+  "subtitles": { // Subtitles-related settings
+    "limit": 30, // Number of subtitles to show
+    "details": { // Other columns to show
+      "downloads": true
+    },
+    "languages": { // Languages-related settings
+      "available": ["Afrikaans", ...], // Languages to list when asking for the subtitles' language
+      "favorites": ["English", ...] // Favorite languages, they will be listed before the others
+    },
+    "opensubtitles": { // OpenSubtitles-related settings
+      "username": null, // Your OperSubtitles username, required for increasing your IP quota
+      "password": null, // Your OperSubtitles password, required for increasing your IP quota
+      "ssl": true
+    }
+  },
+  "webtorrent": { // WebTorrent-related options
+    "options": [] // Custom options to always pass to webtorrent
+  },
+  "prompt": { // Prompt-related options
+    "rows": 10 // Maximum number of lines to display when asking to pick something
+  }
+}
+```
+
 ## License
 
 MIT © Fabio Spampinato
