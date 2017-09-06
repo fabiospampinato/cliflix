@@ -200,13 +200,13 @@ const Utils = {
 
         /* OPTIONS */
 
-        const options = defaults.concat ( dynamics );
+        let options = defaults.concat ( dynamics );
 
         /* ENSURING --APP SWITCH */
 
         if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( dynamics ) ) {
 
-          dynamics = Utils.webtorrent.options.setApp ( dynamics, Config.outputs.favorites[0] || Config.outputs.supported[0] );
+          options = Utils.webtorrent.options.setApp ( dynamics, Config.outputs.favorites[0] || Config.outputs.available[0] );
 
         }
 
