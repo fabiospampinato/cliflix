@@ -1,6 +1,6 @@
 {
   "name": "@fabiospampinato/watch",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",

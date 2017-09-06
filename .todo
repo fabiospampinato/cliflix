@@ -1,14 +1,12 @@
 
 Now:
+  ☐ `Config.**.favorites` might be empty, ensuring proper defaulting
   ☐ Populate the `engine` key of package.json @high @1h
+  ☐ Save files under ~/Downloads (configurable) @1h
 
 Next:
   ☐ Properly detect default app @2h
-  ☐ Save files under ~/Downloads @1h
+  ☐ Add support for setting the favorite torrent providers (perhaps TPB is blocked or something)
 
 Future:
   ☐ Add settings, so that we can default to a specific app @30m
-  ☐ Add support for setting the favorite torrent providers (perhaps TPB is blocked or something)
-  ☐ Add ability to close the shell while still keeping the stream on
-  ☐ Add support for subtitles @1h
-  ☐ Add an alfred workflow
