@@ -2,7 +2,7 @@
 
 Watch anything instantaneously, just write its name.
 
-It searches a magnet for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-support) to your favorite app.
+It searches a magnet for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-support) to your favorite app. It supports subtitles too.
 
 ## Install
 
@@ -14,7 +14,7 @@ $ npm install -g cliflix
 
 #### Wizard
 
-Execute `cliflix` to run a wizard, it'll ask you everything it needs: a search query, which title to stream, and which app to use.
+Execute `cliflix` to run a wizard, it'll ask you everything it needs: a search query, which title to stream, and which app to use. If you want it may also search for subtitles for you.
 
 <p align="center">
 	<img src="resources/wizard.gif" width="600" alt="Wizard">
