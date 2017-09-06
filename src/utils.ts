@@ -73,13 +73,15 @@ const Utils = {
 
     async list ( message, arr, fallback? ) {
 
-      if ( arr.length > Config.inquirer.rows ) arr.push ( new inquirer.Separator ( '\n' ) );
+      //TODO: we should truncate it as well
+
+      if ( arr.length > Config.prompt.rows ) arr.push ( new inquirer.Separator ( '\n' ) );
 
       const {result} = await inquirer.prompt ({
         type: 'list',
         name: 'result',
         choices: arr,
-        pageSize: Config.inquirer.rows,
+        pageSize: Config.prompt.rows,
         message,
         default: fallback,
         validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && x.trim () )
@@ -89,28 +91,13 @@ const Utils = {
 
     },
 
-    async title ( message, titles ) {
+    async table ( message, table, values, colors: any[] = [] ) {
 
       const maxWidth = cliWidth ({ defaultWidth: 80 }) - 6; // Accounting for inquirer's characters too
 
-      /* TABLE */
+      /* TRUNCATE */
 
-      let table: string[][] = [];
-
-      titles.forEach ( title => {
-
-        const row: string[] = [];
-
-        row.push ( truncate ( Utils.torrent.parseTitle ( title.title ), maxWidth ) );
-
-        if ( Config.torrents.details.seeders ) row.push ( `${title.seeds}` );
-        if ( Config.torrents.details.leechers ) row.push ( `${title.peers}` );
-        if ( Config.torrents.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
-        if ( Config.torrents.details.time ) row.push ( title.time );
-
-        table.push ( row );
-
-      });
+      table.forEach ( row => row[0] = truncate ( row[0], maxWidth ) );
 
       /* FORMATTING */
 
@@ -118,7 +105,7 @@ const Utils = {
 
         /* MAX LENGHTS  */
 
-        const maxLenghts = table[0].map ( ( val, index ) => _.max ( table.map ( row => row[index].length ) ) ),
+        const maxLenghts = table[0].map ( ( val, index ) => _.max ( table.map ( row => String ( row[index] ).length ) ) ),
               overflowColumn = maxLenghts.findIndex ( ( length, index ) => ( _.sum ( maxLenghts.slice ( 0, index + 1 ) ) + ( index * 4 ) ) > maxWidth ),
               maxColumn = overflowColumn >= 0 ? Math.max ( 0, overflowColumn - 1 ) : maxLenghts.length - 1;
 
@@ -137,15 +124,17 @@ const Utils = {
 
         /* COLORIZE */
 
-        const colors = [undefined, 'green', 'red', 'yellow', 'magenta'];
+        if ( colors.length ) {
 
-        table = table.map ( row => {
-          return row.map ( ( val, index ) => {
-            const color = colors[index];
-            if ( !color ) return val;
-            return chalk[color]( val );
+          table = table.map ( row => {
+            return row.map ( ( val, index ) => {
+              const color = colors[index];
+              if ( !color ) return val;
+              return chalk[color]( val );
+            });
           });
-        });
+
+        }
 
       }
 
@@ -153,7 +142,7 @@ const Utils = {
 
       const list = table.map ( ( row, index ) => ({
         name: row.length > 1 ? `| ${row.join ( ' | ' )} |` : row[0],
-        value: titles[index]
+        value: values[index]
       }));
 
       /* INQUIRER */
@@ -162,14 +151,58 @@ const Utils = {
 
     },
 
-    async subtitles ( message, subtitles ) { //TODO
+    async title ( message, titles ) {
 
-      const list = subtitles.map ( subtitle => ({
-        name: Utils.subtitles.parseTitle ( subtitle.filename ),
-        value: subtitle
-      }));
+      /* TABLE */
 
-      return Utils.prompt.list ( 'Which subtitles?', list );
+      let table: string[][] = [];
+
+      titles.forEach ( title => {
+
+        const row: string[] = [];
+
+        row.push ( Utils.torrent.parseTitle ( title.title ) );
+
+        if ( Config.torrents.details.seeders ) row.push ( title.seeds );
+        if ( Config.torrents.details.leechers ) row.push ( title.peers );
+        if ( Config.torrents.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
+        if ( Config.torrents.details.time ) row.push ( title.time );
+
+        table.push ( row );
+
+      });
+
+      /* COLORS */
+
+      const colors = [undefined, 'green', 'red', 'yellow', 'magenta'];
+
+      return await Utils.prompt.table ( message, table, titles, colors );
+
+    },
+
+    async subtitles ( message, subtitlesAll ) {
+
+      /* TABLE */
+
+      let table: string[][] = [];
+
+      subtitlesAll.forEach ( subtitles => {
+
+        const row: string[] = [];
+
+        row.push ( Utils.subtitles.parseTitle ( subtitles.filename ) );
+
+        if ( Config.subtitles.details.downloads ) row.push ( subtitles.downloads );
+
+        table.push ( row );
+
+      });
+
+      /* COLORS */
+
+      const colors = [undefined, 'green'];
+
+      return await Utils.prompt.table ( message, table, subtitlesAll, colors );
 
     }
 
