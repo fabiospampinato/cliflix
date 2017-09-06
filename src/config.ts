@@ -89,7 +89,10 @@ function initLocalConfig () {
 
     } else {
 
-      _.merge ( Config, localConfig );
+      _.mergeWith ( Config, localConfig, ( prev, next ) => {
+        if ( !_.isArray ( prev ) || !_.isArray ( next ) ) return;
+        return next;
+      });
 
     }
 
