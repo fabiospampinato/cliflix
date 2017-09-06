@@ -34,9 +34,10 @@
   "dependencies": {
     "caporal": "^0.7.0",
     "chalk": "^2.1.0",
+    "cli-clear": "^1.0.4",
     "execa": "^0.8.0",
     "filesize-parser": "^1.4.1",
-    "inquirer-helpers": "^1.0.3",
+    "inquirer-helpers": "^1.1.0",
     "is-online": "^7.0.0",
     "json5": "^0.5.1",
     "locale-code": "^1.1.1",

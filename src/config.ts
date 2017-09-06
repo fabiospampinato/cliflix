@@ -49,6 +49,7 @@ const Config = {
     options: []
   },
   prompt: {
+    fullscreen: true,
     rows: 10
   }
 };
@@ -57,6 +58,7 @@ const Config = {
 
 function initPrompt () {
 
+  prompt.FULLSCREEN = Config.prompt.fullscreen;
   prompt.PAGE_SIZE = Config.prompt.rows;
 
 }
@@ -100,9 +102,9 @@ function initLocalConfig () {
 
 }
 
-initPrompt ();
 initLocale ();
 initLocalConfig ();
+initPrompt ();
 
 /* EXPORT */
 

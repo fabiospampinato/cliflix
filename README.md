@@ -85,7 +85,8 @@ These are the settings available:
     "options": [] // Custom options to always pass to webtorrent
   },
   "prompt": { // Prompt-related options
-    "rows": 10 // Maximum number of lines to display when asking to pick something
+    "fullscreen": true, // Display as many lines as possible when asking to pick something
+    "rows": 10 // Maximum number of lines to display when asking to pick something, if fullscreen is false
   }
 }
 ```
