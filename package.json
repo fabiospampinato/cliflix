@@ -33,11 +33,9 @@
   "dependencies": {
     "caporal": "^0.7.0",
     "chalk": "^2.1.0",
-    "cli-truncate": "^1.1.0",
-    "cli-width": "^2.2.0",
     "execa": "^0.8.0",
     "filesize-parser": "^1.4.1",
-    "inquirer": "^3.2.3",
+    "inquirer-helpers": "^1.0.0",
     "is-online": "^7.0.0",
     "locale-code": "^1.1.1",
     "lodash": "^4.17.4",

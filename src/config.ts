@@ -4,6 +4,7 @@
 import * as _ from 'lodash';
 import * as localeCode from 'locale-code';
 import * as osLocale from 'os-locale';
+import prompt from 'inquirer-helpers';
 
 /* CONFIG */
 
@@ -44,6 +45,12 @@ const Config = {
 
 /* INIT */
 
+function initPrompt () {
+
+  prompt.PAGE_SIZE = Config.prompt.rows;
+
+}
+
 function initLocale () {
 
   const locale = osLocale.sync ().replace ( '_', '-' ),
@@ -56,6 +63,7 @@ function initLocale () {
 
 }
 
+initPrompt ();
 initLocale ();
 
 /* EXPORT */

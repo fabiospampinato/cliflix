@@ -3,10 +3,9 @@
 
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
-import * as cliWidth from 'cli-width';
-import * as truncate from 'cli-truncate';
 import * as filesizeParser from 'filesize-parser';
 import * as inquirer from 'inquirer';
+import prompt from 'inquirer-helpers';
 import * as isOnline from 'is-online';
 import * as prettySize from 'prettysize';
 import * as request from 'request-promise-native';
@@ -27,127 +26,14 @@ const Utils = {
 
   prompt: {
 
-    parseArr ( arr, favorites: string[] = [] ) {
+    parseList ( list: string[], favorites: string[] = [] ) {
 
-      arr = _.difference ( arr, favorites );
+      list = _.difference ( list, favorites );
 
-      if ( !arr.length ) return favorites;
-      if ( !favorites.length ) return arr;
+      if ( !list.length ) return favorites;
+      if ( !favorites.length ) return list;
 
-      return [...favorites, new inquirer.Separator (), ...arr]; //FIXME: Proper separator width
-
-    },
-
-    async confirm ( message: string, fallback = false ) {
-
-      const {result} = await inquirer.prompt ({
-        type: 'confirm',
-        name: 'result',
-        message,
-        default: fallback
-      });
-
-      return !!result;
-
-    },
-
-    async noYes ( message: string ) {
-
-      return await Utils.prompt.list ( message, ['No', 'Yes'] ) === 'Yes';
-
-    },
-
-    async input ( message, fallback? ) {
-
-      const {result} = await inquirer.prompt ({
-        type: 'input',
-        name: 'result',
-        message,
-        default: fallback,
-        validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && !!x.trim () )
-      });
-
-      return result;
-
-    },
-
-    async list ( message, arr, fallback? ) {
-
-      //TODO: we should truncate it as well
-
-      if ( arr.length > Config.prompt.rows ) arr.push ( new inquirer.Separator ( '\n' ) );
-
-      const {result} = await inquirer.prompt ({
-        type: 'list',
-        name: 'result',
-        choices: arr,
-        pageSize: Config.prompt.rows,
-        message,
-        default: fallback,
-        validate: x => !_.isUndefined ( fallback ) || ( _.isString ( x ) && x.trim () )
-      });
-
-      return result;
-
-    },
-
-    async table ( message, table, values, colors: any[] = [] ) {
-
-      const maxWidth = cliWidth ({ defaultWidth: 80 }) - 6; // Accounting for inquirer's characters too
-
-      /* TRUNCATE */
-
-      table.forEach ( row => row[0] = truncate ( row[0], maxWidth ) );
-
-      /* FORMATTING */
-
-      if ( table[0].length > 1 ) {
-
-        /* MAX LENGHTS  */
-
-        const maxLenghts = table[0].map ( ( val, index ) => _.max ( table.map ( row => String ( row[index] ).length ) ) ),
-              overflowColumn = maxLenghts.findIndex ( ( length, index ) => ( _.sum ( maxLenghts.slice ( 0, index + 1 ) ) + ( index * 4 ) ) > maxWidth ),
-              maxColumn = overflowColumn >= 0 ? Math.max ( 0, overflowColumn - 1 ) : maxLenghts.length - 1;
-
-        /* FILTERING */
-
-        table = table.map ( row => row.slice ( 0, maxColumn + 1) );
-
-        /* PADDING */
-
-        table = table.map ( row => {
-          return row.map ( ( val, index ) => {
-            const padFN = index > 0 ? 'padStart' : 'padEnd';
-            return _[padFN]( val, maxLenghts[index] );
-          });
-        });
-
-        /* COLORIZE */
-
-        if ( colors.length ) {
-
-          table = table.map ( row => {
-            return row.map ( ( val, index ) => {
-              const color = colors[index];
-              if ( !color ) return val;
-              return chalk[color]( val );
-            });
-          });
-
-        }
-
-      }
-
-      /* JOINING */
-
-      const list = table.map ( ( row, index ) => ({
-        name: row.length > 1 ? `| ${row.join ( ' | ' )} |` : row[0],
-        value: values[index]
-      }));
-
-      /* INQUIRER */
-
-      return await Utils.prompt.list ( message, list );
+      return [...favorites, new inquirer.Separator (), ...list]; //FIXME: Proper separator width
 
     },
 
@@ -176,7 +62,7 @@ const Utils = {
 
       const colors = [undefined, 'green', 'red', 'yellow', 'magenta'];
 
-      return await Utils.prompt.table ( message, table, titles, colors );
+      return await prompt.table ( message, table, titles, colors );
 
     },
 
@@ -202,7 +88,7 @@ const Utils = {
 
       const colors = [undefined, 'green'];
 
-      return await Utils.prompt.table ( message, table, subtitlesAll, colors );
+      return await prompt.table ( message, table, subtitlesAll, colors );
 
     }
 
