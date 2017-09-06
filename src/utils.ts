@@ -193,9 +193,9 @@ const Utils = {
 
         /* ENSURING --APP SWITCH */
 
-        if ( !Utils.webtorrent.options.isAppSet ( options ) ) {
+        if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( options ) ) {
 
-          options = Utils.webtorrent.options.setApp ( options, Config.outputs.favorites[0] );
+          options = Utils.webtorrent.options.setApp ( options, Config.outputs.favorites[0] || Config.outputs.supported[0] );
 
         }
 

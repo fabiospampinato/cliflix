@@ -52,7 +52,7 @@ const CLIFlix = {
 
     }
 
-    if ( !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
+    if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( webtorrentOptions ) ) {
 
       const app = await prompt.list ( 'Which app?', Utils.prompt.parseList ( Config.outputs.available, Config.outputs.favorites ) );
 
