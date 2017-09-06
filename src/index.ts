@@ -10,14 +10,14 @@ import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
 
-/* WATCH */
+/* CLIFIX */
 
-const Watch = {
+const CLIFlix = {
 
   async wizard ( webtorrentOptions: string[] = [] ) {
 
     const query = await prompt.input ( 'What do you want to watch?' ),
-          titles = await Watch.getTorrents ( query );
+          titles = await CLIFlix.getTorrents ( query );
 
     if ( !titles.length ) return console.error ( `No titles found for "${query}"` );
 
@@ -31,7 +31,7 @@ const Watch = {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName ),
-              subtitlesAll = await Watch.getSubtitles ( query, languageCode );
+              subtitlesAll = await CLIFlix.getSubtitles ( query, languageCode );
 
         if ( !subtitlesAll.length ) {
 
@@ -60,7 +60,7 @@ const Watch = {
 
     }
 
-    Watch.stream ( magnet, webtorrentOptions );
+    CLIFlix.stream ( magnet, webtorrentOptions );
 
   },
 
@@ -76,7 +76,7 @@ const Watch = {
 
     } catch ( e ) {
 
-      const torrents = await Watch.getTorrents ( queryOrTorrent, 1 );
+      const torrents = await CLIFlix.getTorrents ( queryOrTorrent, 1 );
 
       if ( !torrents.length ) return console.error ( `No titles found for "${queryOrTorrent}"` );
 
@@ -84,7 +84,7 @@ const Watch = {
 
     }
 
-    return Watch.stream ( torrent, webtorrentOptions );
+    return CLIFlix.stream ( torrent, webtorrentOptions );
 
   },
 
@@ -145,4 +145,4 @@ const Watch = {
 
 /* EXPORT */
 
-export default Watch;
+export default CLIFlix;

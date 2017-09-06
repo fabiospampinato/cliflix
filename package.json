@@ -1,6 +1,6 @@
 {
-  "name": "@fabiospampinato/watch",
-  "version": "1.4.0",
+  "name": "cliflix",
+  "version": "1.5.0",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",
@@ -13,7 +13,7 @@
     "prepublish": "npm run clean && npm run lint && npm run compile"
   },
   "bugs": {
-    "url": "https://github.com/fabiospampinato/watch/issues"
+    "url": "https://github.com/fabiospampinato/cliflix/issues"
   },
   "license": "MIT",
   "author": {
@@ -22,13 +22,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fabiospampinato/watch.git"
+    "url": "https://github.com/fabiospampinato/cliflix.git"
   },
   "keywords": [
     "watch",
     "stream",
     "torrent",
-    "cli"
+    "cli",
+    "cliflix"
   ],
   "dependencies": {
     "caporal": "^0.7.0",
