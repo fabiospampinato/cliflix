@@ -23,7 +23,7 @@ const Watch = {
 
     const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
 
-    if ( Config.subtitles.enabled && !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
+    if ( !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
 
       const subbed = await prompt.noYes ( 'Do you want subtitles?' );
 

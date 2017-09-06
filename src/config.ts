@@ -24,7 +24,6 @@ const Config = {
     }
   },
   subtitles: {
-    enabled: false, //FIXME: Not production-ready
     limit: 30,
     details: {
       downloads: true
