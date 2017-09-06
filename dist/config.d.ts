@@ -1,5 +1,9 @@
 declare const Config: {
     localConfigPath: string;
+    download: {
+        path: string;
+        save: boolean;
+    };
     outputs: {
         supported: string[];
         available: string[];
@@ -34,6 +38,7 @@ declare const Config: {
         options: never[];
     };
     prompt: {
+        fullscreen: boolean;
         rows: number;
     };
 };

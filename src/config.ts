@@ -15,6 +15,10 @@ import prompt from 'inquirer-helpers';
 
 const Config = {
   localConfigPath: path.join ( os.homedir (), '.cliflix.json' ),
+  download: {
+    path: path.join ( os.homedir (), 'Downloads' ),
+    save: true
+  },
   outputs: {
     supported: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'omx', 'VLC', 'IINA', 'XBMC', 'stdout'],
     available: ['Airplay', 'Chromecast', 'DLNA', 'MPlayer', 'mpv', 'VLC', 'IINA', 'XBMC'],

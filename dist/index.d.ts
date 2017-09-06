@@ -1,3 +1,4 @@
+import './temp';
 declare const CLIFlix: {
     wizard(webtorrentOptions?: string[]): Promise<void>;
     lucky(queryOrTorrent: any, webtorrentOptions?: string[]): Promise<void>;

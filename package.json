@@ -1,6 +1,6 @@
 {
   "name": "cliflix",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",
@@ -37,7 +37,7 @@
     "clear": "0.0.1",
     "execa": "^0.8.0",
     "filesize-parser": "^1.4.1",
-    "inquirer-helpers": "^1.1.0",
+    "inquirer-helpers": "^1.2.0",
     "is-online": "^7.0.0",
     "json5": "^0.5.1",
     "locale-code": "^1.1.1",

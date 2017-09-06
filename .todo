@@ -1,7 +1,6 @@
 
 Now:
-  ☐ Populate the `engine` key of package.json @high @1h
-  ☐ Save files under ~/Downloads (configurable) @1h
+  ☐ Populate the `engine` key of package.json @1h
 
 Next:
   ☐ Properly detect default app @2h

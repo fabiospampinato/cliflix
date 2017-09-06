@@ -9,6 +9,7 @@ import prompt from 'inquirer-helpers';
 import * as TorrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
+import './temp';
 
 /* CLIFIX */
 

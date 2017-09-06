@@ -133,8 +133,6 @@ const Utils = {
 
     async download ( url ) {
 
-      temp.track ();
-
       const content = await request ( url ),
             stream = temp.createWriteStream ();
 
@@ -152,7 +150,8 @@ const Utils = {
     options: {
 
       appRe: new RegExp ( `^--(${Config.outputs.supported.join ( '|' )})$`, 'i' ),
-      subtitlesRe: /--subtitles/i,
+      outRe: /^--(o|out)$/i,
+      subtitlesRe: /^--subtitles$/i,
 
       isOptionSet ( options: string[], regex ) {
 
@@ -172,6 +171,12 @@ const Utils = {
 
       },
 
+      isOutSet ( options: string[] ) {
+
+        return Utils.webtorrent.options.isOptionSet ( options, Utils.webtorrent.options.outRe );
+
+      },
+
       setApp ( options: string[], app: string ) {
 
         options.push ( `--${app.toLowerCase ()}` );
@@ -182,7 +187,15 @@ const Utils = {
 
       setSubtitles ( options: string[], subtitles: string ) {
 
-        options.push ( `--subtitles`, subtitles );
+        options.push ( '--subtitles', subtitles );
+
+        return options;
+
+      },
+
+      setOut ( options: string[], output: string ) {
+
+        options.push ( '--out', output );
 
         return options;
 
@@ -207,6 +220,16 @@ const Utils = {
         if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( dynamics ) ) {
 
           options = Utils.webtorrent.options.setApp ( dynamics, Config.outputs.favorites[0] || Config.outputs.available[0] );
+
+        }
+
+        /* ENSURING --OUT SETTING */
+
+        if ( !Utils.webtorrent.options.isOutSet ( options ) ) {
+
+          const outPath = Config.download.save ? Config.download.path : temp.mkdirSync ( 'cliflix-' );
+
+          options = Utils.webtorrent.options.setOut ( options, outPath );
 
         }
 

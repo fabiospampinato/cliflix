@@ -53,6 +53,10 @@ These are the settings available:
 
 ```js
 {
+  "download": { // Download-related settings
+    "save": true, // Save the downloaded torrent or delete it upon exit
+    "path": "~/Downloads" // If saving it, put it here
+  },
   "outputs": { // Apps-related settings
     "available": ["Airplay", "Chromecast", "DLNA", "MPlayer", "mpv", "VLC", "IINA", "XBMC"], // Apps to list when asking for the app
     "favorites": ["VLC"] // Favorite apps, they will be listed before the others
