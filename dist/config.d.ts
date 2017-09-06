@@ -1,4 +1,5 @@
 declare const Config: {
+    localConfigPath: string;
     outputs: {
         supported: string[];
         available: string[];
@@ -14,7 +15,6 @@ declare const Config: {
         };
     };
     subtitles: {
-        enabled: boolean;
         limit: number;
         details: {
             downloads: boolean;
@@ -29,6 +29,9 @@ declare const Config: {
             password: null;
             ssl: boolean;
         };
+    };
+    webtorrent: {
+        options: never[];
     };
     prompt: {
         rows: number;

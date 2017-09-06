@@ -15,12 +15,14 @@ declare const Utils: {
     };
     webtorrent: {
         options: {
+            appRe: RegExp;
+            subtitlesRe: RegExp;
             isOptionSet(options: string[], regex: any): boolean;
             isAppSet(options: string[]): boolean;
             isSubtitlesSet(options: string[]): boolean;
             setApp(options: string[], app: string): string[];
             setSubtitles(options: string[], subtitles: string): string[];
-            parse(options: string[]): string[];
+            parse(dynamics: string[], defaults?: string[]): string[];
         };
     };
     language: {
