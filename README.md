@@ -51,7 +51,7 @@ You can customize `cliflix` to your likings via a `~/.cliflix.json` file. `~` is
 
 These are the settings available:
 
-```json
+```js
 {
   "outputs": { // Apps-related settings
     "available": ["Airplay", "Chromecast", "DLNA", "MPlayer", "mpv", "VLC", "IINA", "XBMC"], // Apps to list when asking for the app
@@ -72,8 +72,8 @@ These are the settings available:
       "downloads": true
     },
     "languages": { // Languages-related settings
-      "available": ["Afrikaans", ...], // Languages to list when asking for the subtitles' language
-      "favorites": ["English", ...] // Favorite languages, they will be listed before the others
+      "available": ["Afrikaans", "..."], // Languages to list when asking for the subtitles' language
+      "favorites": ["English", "..."] // Favorite languages, they will be listed before the others
     },
     "opensubtitles": { // OpenSubtitles-related settings
       "username": null, // Your OperSubtitles username, required for increasing your IP quota
