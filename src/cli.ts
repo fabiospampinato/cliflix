@@ -3,6 +3,7 @@
 
 import * as _ from 'lodash';
 import * as caporal from 'caporal';
+import * as cliClear from 'cli-clear';
 import * as readPkg from 'read-pkg-up';
 import * as updateNotifier from 'update-notifier';
 import Utils from './utils';
@@ -19,6 +20,8 @@ async function CLI () {
     .argument ( '[title|torrent]', 'Video title or torrent identifier' )
     .argument ( '[-- webtorrent options...]', 'WebTorrent options' )
     .action ( async ( args ) => {
+
+      cliClear ();
 
       await Utils.checkConnection ();
 
