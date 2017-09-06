@@ -129,7 +129,7 @@ const CLIFlix = {
 
   async stream ( torrent, webtorrentOptions: string[] = [] ) {
 
-    webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions );
+    webtorrentOptions = Utils.webtorrent.options.parse ( webtorrentOptions, Config.webtorrent.options );
 
     const execArgs = ['download', torrent, ...webtorrentOptions],
           execOpts = {

@@ -151,6 +151,9 @@ const Utils = {
 
     options: {
 
+      appRe: new RegExp ( `^--(${Config.outputs.supported.join ( '|' )})$`, 'i' ),
+      subtitlesRe: /--subtitles/i,
+
       isOptionSet ( options: string[], regex ) {
 
         return !!options.find ( option => !!option.match ( regex ) );
@@ -159,17 +162,13 @@ const Utils = {
 
       isAppSet ( options: string[] ) {
 
-        const appRe = new RegExp ( `^--(${Config.outputs.supported.join ( '|' )})$`, 'i' );
-
-        return Utils.webtorrent.options.isOptionSet ( options, appRe );
+        return Utils.webtorrent.options.isOptionSet ( options, Utils.webtorrent.options.appRe );
 
       },
 
       isSubtitlesSet ( options: string[] ) {
 
-        const subtitlesRe = /--subtitles/i;
-
-        return Utils.webtorrent.options.isOptionSet ( options, subtitlesRe );
+        return Utils.webtorrent.options.isOptionSet ( options, Utils.webtorrent.options.subtitlesRe );
 
       },
 
@@ -189,13 +188,25 @@ const Utils = {
 
       },
 
-      parse ( options: string[] ) {
+      parse ( dynamics: string[], defaults: string[] = [] ) {
+
+        /* ENSURING NO DUPLICATE --APP SWITCH */
+
+        if ( Utils.webtorrent.options.isAppSet ( dynamics ) && Utils.webtorrent.options.isAppSet ( defaults ) ) {
+
+          defaults = defaults.filter ( option => !option.match ( Utils.webtorrent.options.appRe ) );
+
+        }
+
+        /* OPTIONS */
+
+        const options = defaults.concat ( dynamics );
 
         /* ENSURING --APP SWITCH */
 
-        if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( options ) ) {
+        if ( ( Config.outputs.available.length || Config.outputs.favorites.length ) && !Utils.webtorrent.options.isAppSet ( dynamics ) ) {
 
-          options = Utils.webtorrent.options.setApp ( options, Config.outputs.favorites[0] || Config.outputs.supported[0] );
+          dynamics = Utils.webtorrent.options.setApp ( dynamics, Config.outputs.favorites[0] || Config.outputs.supported[0] );
 
         }
 

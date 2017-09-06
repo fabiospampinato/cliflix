@@ -39,6 +39,9 @@ const Config = {
       ssl: true
     }
   },
+  webtorrent: {
+    options: []
+  },
   prompt: {
     rows: 10
   }
