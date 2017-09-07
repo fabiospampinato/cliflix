@@ -47,7 +47,7 @@ const Config = {
       favorites: ['English', 'French', 'German', 'Hindi', 'Italian', 'Japanese', 'Portuguese', 'Russian', 'Spanish']
     },
     opensubtitles: {
-      useragent: 'My Application v0.1', //TODO: Register app
+      useragent: 'PlayMe v1',
       username: null,
       password: null,
       ssl: true
