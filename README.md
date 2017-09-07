@@ -62,8 +62,8 @@ These are the settings available:
     "favorites": ["VLC"] // Favorite apps, they will be listed before the others
   },
   "torrents": { // Torrents-related settings
-    "limit": 30, // Number of torrent to show
-    "details": { // Other columns to show
+    "limit": 30, // Number of torrents to show
+    "details": { // Extra columns to show
       "seeders": true,
       "leechers": true,
       "size": true,
@@ -72,7 +72,7 @@ These are the settings available:
   },
   "subtitles": { // Subtitles-related settings
     "limit": 30, // Number of subtitles to show
-    "details": { // Other columns to show
+    "details": { // Extra columns to show
       "downloads": true
     },
     "languages": { // Languages-related settings
@@ -86,7 +86,7 @@ These are the settings available:
     }
   },
   "webtorrent": { // WebTorrent-related options
-    "options": [] // Custom options to always pass to webtorrent
+    "options": [] // Custom options to always pass to WebTorrent
   },
   "prompt": { // Prompt-related options
     "fullscreen": true, // Display as many lines as possible when asking to pick something
