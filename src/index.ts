@@ -95,10 +95,15 @@ const CLIFlix = {
 
   },
 
-  async getTorrents ( query, rows = Config.torrents.limit ) {
+  async getTorrents ( query, rows = Config.torrents.limit, provider = Config.torrents.providers.active ) {
 
-    const provider = Config.torrents.providers.active,
-          categories = {
+    if ( !provider ) {
+
+      provider = await prompt.list ( 'Which torrents provider?', Config.torrents.providers.available );
+
+    }
+
+    const categories = {
             ThePirateBay: 'Video',
             TorrentProject: 'Video'
           },
