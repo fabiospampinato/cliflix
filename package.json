@@ -5,6 +5,9 @@
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --skipLibCheck",
