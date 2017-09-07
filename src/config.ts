@@ -15,7 +15,7 @@ import prompt from 'inquirer-helpers';
 
 const Config = {
   localConfigPath: path.join ( os.homedir (), '.cliflix.json' ),
-  download: {
+  downloads: {
     path: path.join ( os.homedir (), 'Downloads' ),
     save: true
   },
