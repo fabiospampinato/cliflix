@@ -1,6 +1,6 @@
 {
   "name": "cliflix",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",
@@ -58,5 +58,8 @@
     "rimraf": "^2.6.0",
     "tslint": "^5.7.0",
     "typescript": "~2.5.2"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
   }
 }
