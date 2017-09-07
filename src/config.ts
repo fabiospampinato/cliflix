@@ -31,6 +31,10 @@ const Config = {
       leechers: true,
       size: true,
       time: false
+    },
+    providers: {
+      available: ['1337x', 'KickassTorrents', 'Rarbg', 'T411', 'ThePirateBay', 'Torrent9', 'TorrentProject', 'Torrentz2'],
+      active: 'ThePirateBay'
     }
   },
   subtitles: {

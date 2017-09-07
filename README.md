@@ -68,6 +68,10 @@ These are the settings available:
       "leechers": true,
       "size": true,
       "time": false
+    },
+    "providers": { // Torrents providers-related settings
+      "available": ["1337x", "KickassTorrents", "Rarbg", "T411", "ThePirateBay", "Torrent9", "TorrentProject", "Torrentz2"], // Providers to list if none is active
+      "active": "ThePirateBay" // Active provider
     }
   },
   "subtitles": { // Subtitles-related settings
