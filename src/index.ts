@@ -17,10 +17,16 @@ const CLIFlix = {
 
   async wizard ( webtorrentOptions: string[] = [] ) {
 
-    const query = await prompt.input ( 'What do you want to watch?' ),
-          titles = await CLIFlix.getTorrents ( query );
+    let query, titles;
 
-    if ( !titles.length ) return console.error ( `No titles found for "${query}"` );
+    while ( !titles || !titles.length ) {
+
+      query = await prompt.input ( 'What do you want to watch?' );
+      titles = await CLIFlix.getTorrents ( query );
+
+      if ( !titles.length ) console.error ( `No titles found for "${query}", try again.` );
+
+    }
 
     const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
 
