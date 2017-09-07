@@ -1,6 +1,6 @@
 declare const Config: {
     localConfigPath: string;
-    download: {
+    downloads: {
         path: string;
         save: boolean;
     };
@@ -16,6 +16,10 @@ declare const Config: {
             leechers: boolean;
             size: boolean;
             time: boolean;
+        };
+        providers: {
+            available: string[];
+            active: string;
         };
     };
     subtitles: {

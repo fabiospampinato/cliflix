@@ -1,7 +1,3 @@
 
-Now:
-  ☐ Populate the `engine` key of package.json @1h
-
-Next:
-  ☐ Properly detect default app @2h
-  ☐ Add support for setting the favorite torrent providers (perhaps TPB is blocked or something)
+☐ Add support for searching multiple torrents providers at the same time
+☐ Properly detect default app

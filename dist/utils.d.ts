@@ -1,4 +1,5 @@
 declare const Utils: {
+    clear(): void;
     checkConnection(): Promise<void>;
     prompt: {
         parseList(list: string[], favorites?: string[]): any[];
