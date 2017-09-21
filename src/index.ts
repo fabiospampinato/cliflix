@@ -49,7 +49,7 @@ const CLIFlix = {
         } else {
 
           const subtitles = await Utils.prompt.subtitles ( 'Which subtitles?', subtitlesAll ),
-                stream = await Utils.subtitles.download ( subtitles.url );
+                stream = await Utils.subtitles.download ( subtitles );
 
           Utils.webtorrent.options.setSubtitles ( webtorrentOptions, stream.path );
 

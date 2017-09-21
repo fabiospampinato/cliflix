@@ -4,7 +4,9 @@
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import * as filesizeParser from 'filesize-parser';
+import * as fs from 'fs';
 import * as inquirer from 'inquirer';
+import * as path from 'path';
 import prompt from 'inquirer-helpers';
 import * as isOnline from 'is-online';
 import * as prettySize from 'prettysize';
@@ -137,10 +139,10 @@ const Utils = {
 
     },
 
-    async download ( url ) {
+    async download ({ url, filename }) {
 
       const content = await request ( url ),
-            stream = temp.createWriteStream ();
+            stream = Config.downloads.save ? fs.createWriteStream ( path.join ( Config.downloads.path, filename ) ) : temp.createWriteStream ();
 
       stream.write ( content );
       stream.end ();
