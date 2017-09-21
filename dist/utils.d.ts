@@ -12,7 +12,10 @@ declare const Utils: {
     };
     subtitles: {
         parseTitle(title: any): any;
-        download(url: any): Promise<any>;
+        download({url, filename}: {
+            url: any;
+            filename: any;
+        }): Promise<any>;
     };
     webtorrent: {
         options: {
