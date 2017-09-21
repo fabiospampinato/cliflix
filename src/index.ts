@@ -28,7 +28,7 @@ const CLIFlix = {
 
     }
 
-    const {magnet} = await Utils.prompt.title ( 'Which title?', titles );
+    const {title, magnet} = await Utils.prompt.title ( 'Which title?', titles );
 
     if ( ( Config.subtitles.languages.available.length || Config.subtitles.languages.favorites.length ) && !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
 
@@ -38,7 +38,7 @@ const CLIFlix = {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName ),
-              subtitlesAll = await CLIFlix.getSubtitles ( query, languageCode );
+              subtitlesAll = await CLIFlix.getSubtitles ( title, languageCode );
 
         if ( !subtitlesAll.length ) {
 
