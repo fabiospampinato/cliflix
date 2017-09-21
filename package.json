@@ -36,7 +36,7 @@
     "chalk": "^2.1.0",
     "execa": "^0.8.0",
     "filesize-parser": "^1.4.1",
-    "inquirer-helpers": "^1.2.0",
+    "inquirer-helpers": "^1.2.1",
     "is-online": "^7.0.0",
     "json5": "^0.5.1",
     "locale-code": "^1.1.1",
@@ -49,13 +49,13 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "temp": "^0.8.3",
-    "torrent-search-api": "^1.0.15",
+    "torrent-search-api": "^1.0.16",
     "update-notifier": "^2.2.0",
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-support"
   },
   "devDependencies": {
     "@types/node": "^8.0.26",
-    "rimraf": "^2.6.0",
+    "rimraf": "^2.6.2",
     "tslint": "^5.7.0",
     "typescript": "~2.5.2"
   },
