@@ -84,8 +84,8 @@ These are the settings available:
       "favorites": ["English", "..."] // Favorite languages, they will be listed before the others
     },
     "opensubtitles": { // OpenSubtitles-related settings
-      "username": null, // Your OperSubtitles username, required for increasing your IP quota
-      "password": null, // Your OperSubtitles password, required for increasing your IP quota
+      "username": null, // Your OpenSubtitles username, required for increasing your IP quota
+      "password": null, // Your OpenSubtitles password, required for increasing your IP quota
       "ssl": true
     }
   },
