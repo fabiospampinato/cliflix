@@ -18,12 +18,6 @@ import Config from './config';
 
 const Utils = {
 
-  clear () {
-
-    process.stdout.write ( '\x1bc\x1b[H\x1b[2J' );
-
-  },
-
   async checkConnection () {
 
     const online = await isOnline ();
