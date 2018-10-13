@@ -51,7 +51,7 @@
     "temp": "^0.8.3",
     "torrent-search-api": "^2.0.3",
     "update-notifier": "^2.5.0",
-    "webtorrent-cli": "^1.12.3"
+    "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-pip"
   },
   "devDependencies": {
     "@types/node": "^8.0.26",

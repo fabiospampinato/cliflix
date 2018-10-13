@@ -2,7 +2,7 @@
 
 Watch anything instantaneously, just write its name.
 
-It searches a torrent for you and streams it using [WebTorrent](https://github.com/webtorrent/webtorrent-cli) to your favorite app. It supports subtitles too.
+It searches a torrent for you and streams it using [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-pip) to your favorite app. It supports subtitles too.
 
 > **Warning**: If you don't know what a torrent is, or are unsure about the legality of the torrents you're downloading you shouldn't use `cliflix`.
 
@@ -40,9 +40,10 @@ cliflix "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&
 
 #### WebTorrent Options
 
-You can pass arbitrary options to [WebTorrent](https://github.com/webtorrent/webtorrent-cli), read more about them [here](https://github.com/webtorrent/webtorrent-cli). Just write them after the special `--` argument:
+You can pass arbitrary options to [WebTorrent](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-pip), read more about them [here](https://github.com/fabiospampinato/webtorrent-cli/tree/iina-pip). Just write them after the special `--` argument:
 
 ```shell
+cliflix -- --iina --pip
 cliflix -- --vlc --port 1234
 cliflix Sintel -- --vlc --port 1234
 ```
