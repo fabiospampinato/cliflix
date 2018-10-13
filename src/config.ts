@@ -33,7 +33,7 @@ const Config = {
       time: false
     },
     providers: {
-      available: ['1337x', 'ThePirateBay', 'ExtraTorrent', 'Rarbg', 'ThePirateBay', 'Torrent9', 'KickassTorrents', 'TorrentProject', 'Torrentz2'],
+      available: ['1337x', 'ThePirateBay', 'ExtraTorrent', 'Rarbg', 'Torrent9', 'KickassTorrents', 'TorrentProject', 'Torrentz2'],
       active: '1337x'
     }
   },

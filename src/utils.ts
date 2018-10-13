@@ -41,9 +41,16 @@ const Utils = {
 
     async title ( message, titles ) {
 
+      /* CHECKS */
+
+      const hasSeeders = titles[0] && _.isNumber ( titles[0].seeds ),
+            hasLeechers = titles[0] && _.isNumber ( titles[0].peers ),
+            hasSize = titles[0] && _.isString ( titles[0].size ),
+            hasTime = titles[0] && _.isString ( titles[0].time );
+
       /* TABLE */
 
-      let table: string[][] = [];
+      const table: string[][] = [];
 
       titles.forEach ( title => {
 
@@ -51,10 +58,10 @@ const Utils = {
 
         row.push ( Utils.torrent.parseTitle ( title.title ) );
 
-        if ( Config.torrents.details.seeders ) row.push ( title.seeds );
-        if ( Config.torrents.details.leechers ) row.push ( title.peers );
-        if ( Config.torrents.details.size ) row.push ( Utils.torrent.parseSize ( title.size ) );
-        if ( Config.torrents.details.time ) row.push ( title.time );
+        if ( Config.torrents.details.seeders && hasSeeders ) row.push ( title.seeds );
+        if ( Config.torrents.details.leechers && hasLeechers ) row.push ( title.peers );
+        if ( Config.torrents.details.size && hasSize ) row.push ( Utils.torrent.parseSize ( title.size ) );
+        if ( Config.torrents.details.time && hasTime ) row.push ( title.time );
 
         table.push ( row );
 
@@ -62,7 +69,12 @@ const Utils = {
 
       /* COLORS */
 
-      const colors = [undefined, 'green', 'red', 'yellow', 'magenta'];
+      const colors: (undefined | string)[] = [undefined];
+
+      if ( Config.torrents.details.seeders && hasSeeders ) colors.push ( 'green' );
+      if ( Config.torrents.details.leechers && hasLeechers ) colors.push ( 'red' );
+      if ( Config.torrents.details.size && hasSize ) colors.push ( 'yellow' );
+      if ( Config.torrents.details.time && hasTime ) colors.push ( 'magenta' );
 
       return await prompt.table ( message, table, titles, colors );
 
@@ -72,7 +84,7 @@ const Utils = {
 
       /* TABLE */
 
-      let table: string[][] = [];
+      const table: string[][] = []
 
       subtitlesAll.forEach ( subtitles => {
 
