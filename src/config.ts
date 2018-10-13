@@ -33,8 +33,8 @@ const Config = {
       time: false
     },
     providers: {
-      available: ['1337x', 'KickassTorrents', 'Rarbg', 'T411', 'ThePirateBay', 'Torrent9', 'TorrentProject', 'Torrentz2'],
-      active: 'ThePirateBay'
+      available: ['1337x', 'ThePirateBay', 'ExtraTorrent', 'Rarbg', 'ThePirateBay', 'Torrent9', 'KickassTorrents', 'TorrentProject', 'Torrentz2'],
+      active: '1337x'
     }
   },
   subtitles: {
@@ -95,7 +95,7 @@ function initLocalConfig () {
 
     if ( _.isError ( localConfig ) ) {
 
-      console.error ( chalk.red ( `Error reading the configuration file (${Config.localConfigPath}). Is it properly formatted JSON?` ) );
+      console.error ( chalk.red ( `Error reading the configuration file (${chalk.bold ( Config.localConfigPath )}). Is it properly formatted JSON?` ) );
 
     } else {
 

@@ -49,7 +49,7 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "temp": "^0.8.3",
-    "torrent-search-api": "^1.0.16",
+    "torrent-search-api": "^2.0.3",
     "update-notifier": "^2.2.0",
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-support"
   },

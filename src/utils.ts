@@ -22,7 +22,7 @@ const Utils = {
 
     const online = await isOnline ();
 
-    if ( !online ) throw new Error ( chalk.red ( `Looks like you are offline, try again later.\n` ) ) ;
+    if ( !online ) throw new Error ( chalk.red ( 'Looks like you are offline, try again later.\n' ) ) ;
 
   },
 

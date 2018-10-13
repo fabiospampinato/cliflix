@@ -1,12 +1,14 @@
 
 /* IMPORT */
 
+import * as _ from 'lodash';
+import * as chalk from 'chalk';
 import * as execa from 'execa';
 import * as OpenSubtitles from 'opensubtitles-api';
 import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import prompt from 'inquirer-helpers';
-import * as TorrentSearch from 'torrent-search-api';
+import * as torrentSearch from 'torrent-search-api';
 import Config from './config';
 import Utils from './utils';
 import './temp';
@@ -17,18 +19,10 @@ const CLIFlix = {
 
   async wizard ( webtorrentOptions: string[] = [] ) {
 
-    let query, titles;
+    const torrent = await CLIFlix.getTorrent (),
+          magnet = await CLIFlix.getMagnet ( torrent );
 
-    while ( !titles || !titles.length ) {
-
-      query = await prompt.input ( 'What do you want to watch?' );
-      titles = await CLIFlix.getTorrents ( query );
-
-      if ( !titles.length ) console.error ( `No titles found for "${query}", try again.` );
-
-    }
-
-    const {title, magnet} = await Utils.prompt.title ( 'Which title?', titles );
+    if ( !magnet ) return console.error ( chalk.red ( 'Magnet not found.' ) );
 
     if ( ( Config.subtitles.languages.available.length || Config.subtitles.languages.favorites.length ) && !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
 
@@ -38,7 +32,7 @@ const CLIFlix = {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName ),
-              subtitlesAll = await CLIFlix.getSubtitles ( title, languageCode );
+              subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
 
         if ( !subtitlesAll.length ) {
 
@@ -85,9 +79,11 @@ const CLIFlix = {
 
       const torrents = await CLIFlix.getTorrents ( queryOrTorrent, 1 );
 
-      if ( !torrents.length ) return console.error ( `No titles found for "${queryOrTorrent}"` );
+      if ( !torrents.length ) return console.error ( chalk.red ( `No torrents found for "${chalk.bold ( queryOrTorrent )}"` ) );
 
-      torrent = torrents[0].magnet;
+      torrent = await CLIFlix.getMagnet ( torrents[0] );
+
+      if ( !torrent ) return console.error ( chalk.red ( 'Magnet not found.' ) );
 
     }
 
@@ -95,11 +91,13 @@ const CLIFlix = {
 
   },
 
-  async getTorrents ( query, rows = Config.torrents.limit, provider = Config.torrents.providers.active ) {
+  async getTorrents ( query, rows = Config.torrents.limit, provider = Config.torrents.providers.active, providers = Config.torrents.providers.available ) {
+
+    const hasProvider = !!provider;
 
     if ( !provider ) {
 
-      provider = await prompt.list ( 'Which torrents provider?', Config.torrents.providers.available );
+      provider = await prompt.list ( 'Which torrents provider?', providers );
 
     }
 
@@ -111,15 +109,60 @@ const CLIFlix = {
 
     try {
 
-      const TS = new TorrentSearch ();
+      torrentSearch.disableAllProviders ();
+      torrentSearch.enableProvider ( provider );
 
-      TS.enableProvider ( provider );
+      const torrents = await torrentSearch.search ( query, category, rows );
 
-      return await TS.search ( query, category, rows );
+      if ( !torrents.length ) throw new Error ( 'No torrents found.' );
+
+      return torrents;
 
     } catch ( e ) {
 
-      return [];
+      console.error ( chalk.yellow ( `No torrents found via "${chalk.bold ( provider )}"` ) );
+
+      const nextProviders = _.without ( providers, provider ),
+            nextProvider = hasProvider ? providers[providers.indexOf ( provider ) + 1] : '';
+
+      if ( !nextProvider && !nextProviders.length ) return [];
+
+      return await CLIFlix.getTorrents ( query, rows, nextProvider, nextProviders );
+
+    }
+
+  },
+
+  async getTorrent () {
+
+    while ( true ) {
+
+      const query = await prompt.input ( 'What do you want to watch?' ),
+            torrents = await CLIFlix.getTorrents ( query );
+
+      if ( !torrents.length ) {
+
+        console.error ( chalk.yellow ( `No torrents found for "${chalk.bold ( query )}", try another query.` ) );
+
+        continue;
+
+      }
+
+      return await Utils.prompt.title ( 'Which torrent?', torrents );
+
+    }
+
+  },
+
+  async getMagnet ( torrent ) {
+
+    try {
+
+      return await torrentSearch.getMagnet ( torrent );
+
+    } catch ( e ) {
+
+      return;
 
     }
 
