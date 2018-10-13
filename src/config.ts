@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as fs from 'fs';
 import * as JSON5 from 'json5';
 import * as localeCode from 'locale-code';

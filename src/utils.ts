@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as filesizeParser from 'filesize-parser';
 import * as fs from 'fs';
 import * as inquirer from 'inquirer';

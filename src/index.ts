@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as execa from 'execa';
 import * as OpenSubtitles from 'opensubtitles-api';
 import * as parseTorrent from 'parse-torrent';
