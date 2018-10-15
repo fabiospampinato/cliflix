@@ -6,6 +6,9 @@ It searches a torrent for you and streams it using [WebTorrent](https://github.c
 
 > **Warning**: If you don't know what a torrent is, or are unsure about the legality of the torrents you're downloading you shouldn't use `cliflix`.
 
+## Requirements
+* [Node](https://www.npmjs.com) 6.0 or higher
+
 ## Install
 
 ```shell
