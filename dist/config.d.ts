@@ -39,7 +39,7 @@ declare const Config: {
         };
     };
     webtorrent: {
-        options: never[];
+        options: string[];
     };
     prompt: {
         fullscreen: boolean;
