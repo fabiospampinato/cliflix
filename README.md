@@ -93,7 +93,9 @@ These are the settings available:
     }
   },
   "webtorrent": { // WebTorrent-related options
-    "options": [] // Custom options to always pass to WebTorrent
+    "options": [ // Custom options to always pass to WebTorrent
+      '--keep-seeding'
+    ]
   }
 }
 ```

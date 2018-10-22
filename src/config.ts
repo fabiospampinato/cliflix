@@ -54,7 +54,9 @@ const Config = {
     }
   },
   webtorrent: {
-    options: []
+    options: [
+      '--keep-seeding'
+    ]
   },
   prompt: {
     fullscreen: true,
