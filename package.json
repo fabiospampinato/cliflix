@@ -1,6 +1,6 @@
 {
   "name": "cliflix",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/bin/index.js",
   "main": "dist/index.js",
@@ -53,6 +53,7 @@
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-pip"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.117",
     "@types/node": "^8.0.26",
     "rimraf": "^2.6.2",
     "typescript": "~3.0.3"
