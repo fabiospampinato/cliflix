@@ -39,3 +39,4 @@ package-lock.json
 .nyc_output
 coverage
 typings
+dist
