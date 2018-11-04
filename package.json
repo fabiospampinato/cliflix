@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/node": "^8.0.26",
     "rimraf": "^2.6.2",
-    "typescript": "~2.5.2"
+    "typescript": "~3.0.3"
   },
   "engines": {
     "node": ">= 6.0.0"

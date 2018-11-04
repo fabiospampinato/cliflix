@@ -207,4 +207,4 @@ const CLIFlix = {
 
 /* EXPORT */
 
-export default CLIFlix;
+export = Object.assign ( CLIFlix, { default: CLIFlix } );
