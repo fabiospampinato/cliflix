@@ -9,7 +9,7 @@
     "clean": "rimraf dist",
     "compile": "tsc --skipLibCheck",
     "compile:watch": "tsc --skipLibCheck --watch",
-    "prepublish": "npm run clean && npm run compile"
+    "prepublishOnly": "npm run clean && npm run compile"
   },
   "bugs": {
     "url": "https://github.com/fabiospampinato/cliflix/issues"
