@@ -12,7 +12,7 @@ import CLIFlix from '.';
 
 async function CLI () {
 
-  process.on ( 'SIGINT', () => process.exit () ); // Force quitting
+  process.on ( 'SIGINT', () => process.exit ( 1 ) ); // Force quitting
 
   const {pkg} = await readPkg ({ cwd: __dirname });
 
