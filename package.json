@@ -31,6 +31,8 @@
     "cliflix"
   ],
   "dependencies": {
+    "@types/lodash": "^4.14.118",
+    "@types/node": "^10.12.8",
     "caporal": "^0.10.0",
     "chalk": "^2.4.1",
     "execa": "^0.8.0",
@@ -53,8 +55,6 @@
     "webtorrent-cli": "git://github.com/fabiospampinato/webtorrent-cli.git#iina-pip"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.117",
-    "@types/node": "^8.0.26",
     "rimraf": "^2.6.2",
     "typescript": "~3.0.3",
     "typescript-transform-export-interop": "^1.0.1"
