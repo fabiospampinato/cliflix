@@ -1,24 +1,24 @@
 {
-	"compilerOptions": {
+  "compilerOptions": {
     "alwaysStrict": true,
-		"declaration": true,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "inlineSourceMap": true,
-		"lib": ["dom", "scripthost", "es2015", "es2016", "es2017"],
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"newLine": "LF",
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitReturns": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": false,
-		"outDir": "dist",
-		"pretty": true,
-		"strictNullChecks": true,
-		"target": "es5"
-	},
+    "lib": ["dom", "scripthost", "es2015", "es2016", "es2017"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "outDir": "dist",
+    "pretty": true,
+    "strictNullChecks": true,
+    "target": "es5"
+  },
   "include": [
     "src"
   ],

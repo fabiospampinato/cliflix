@@ -19,7 +19,7 @@ $ npm install -g cliflix
 Execute `cliflix` to run a wizard, it'll ask you everything it needs: a search query, which torrent to stream, and which app to use. If you want it may also search for subtitles for you.
 
 <p align="center">
-	<img src="resources/wizard.gif" width="631" alt="Wizard">
+  <img src="resources/wizard.gif" width="631" alt="Wizard">
 </p>
 
 #### I'm Feeling Lucky
