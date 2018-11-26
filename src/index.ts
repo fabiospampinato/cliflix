@@ -9,6 +9,7 @@ import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import prompt from 'inquirer-helpers';
 import * as torrentSearch from 'torrent-search-api';
+import * as ora from 'ora';
 import Config from './config';
 import Utils from './utils';
 import './temp';
@@ -31,16 +32,23 @@ const CLIFlix = {
       if ( subbed ) {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
-              languageCode = Utils.language.getCode ( languageName ),
-              subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
+              languageCode = Utils.language.getCode ( languageName );
+
+        const subtitlesSpinner = ora ( 'Looking for subtitles ' ).start ();
+
+        const subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
 
         if ( !subtitlesAll.length ) {
+
+          subtitlesSpinner.fail ();
 
           const okay = await prompt.noYes ( `No subtitles found for "${languageName}", play it anyway?` );
 
           if ( !okay ) return;
 
         } else {
+
+          subtitlesSpinner.succeed ();
 
           const subtitles = await Utils.prompt.subtitles ( 'Which subtitles?', subtitlesAll ),
                 stream = await Utils.subtitles.download ( subtitles );
@@ -107,6 +115,8 @@ const CLIFlix = {
           },
           category = categories[provider] || 'All';
 
+    const providerSpinner = ora ( `Looking for torrents via "${chalk.bold ( provider )}"` ).start ();
+
     try {
 
       torrentSearch.disableAllProviders ();
@@ -116,11 +126,13 @@ const CLIFlix = {
 
       if ( !torrents.length ) throw new Error ( 'No torrents found.' );
 
+      providerSpinner.succeed ();
+
       return torrents;
 
     } catch ( e ) {
 
-      console.error ( chalk.yellow ( `No torrents found via "${chalk.bold ( provider )}"` ) );
+      providerSpinner.fail ();
 
       const nextProviders = _.without ( providers, provider ),
             nextProvider = hasProvider ? providers[providers.indexOf ( provider ) + 1] : '';
