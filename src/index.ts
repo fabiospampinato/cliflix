@@ -34,21 +34,19 @@ const CLIFlix = {
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName );
 
-        const subtitlesSpinner = ora ( 'Looking for subtitles ' ).start ();
+        const spinner = ora ( `Waiting for "${chalk.bold ( 'OpenSubtitles' ) }"...` ).start ();
 
         const subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
 
-        if ( !subtitlesAll.length ) {
+        spinner.stop ();
 
-          subtitlesSpinner.fail ();
+        if ( !subtitlesAll.length ) {
 
           const okay = await prompt.noYes ( `No subtitles found for "${languageName}", play it anyway?` );
 
           if ( !okay ) return;
 
         } else {
-
-          subtitlesSpinner.succeed ();
 
           const subtitles = await Utils.prompt.subtitles ( 'Which subtitles?', subtitlesAll ),
                 stream = await Utils.subtitles.download ( subtitles );
@@ -115,7 +113,7 @@ const CLIFlix = {
           },
           category = categories[provider] || 'All';
 
-    const providerSpinner = ora ( `Looking for torrents via "${chalk.bold ( provider )}"` ).start ();
+    const spinner = ora ( `Waiting for "${chalk.bold ( provider )}"...` ).start ();
 
     try {
 
@@ -124,15 +122,15 @@ const CLIFlix = {
 
       const torrents = await torrentSearch.search ( query, category, rows );
 
-      if ( !torrents.length ) throw new Error ( 'No torrents found.' );
+      spinner.stop ();
 
-      providerSpinner.succeed ();
+      if ( !torrents.length ) throw new Error ( 'No torrents found.' );
 
       return torrents;
 
     } catch ( e ) {
 
-      providerSpinner.fail ();
+      console.error ( chalk.yellow ( `No torrents found via "${chalk.bold ( provider )}"` ) );
 
       const nextProviders = _.without ( providers, provider ),
             nextProvider = hasProvider ? providers[providers.indexOf ( provider ) + 1] : '';
