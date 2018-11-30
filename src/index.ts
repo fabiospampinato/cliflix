@@ -9,6 +9,7 @@ import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import prompt from 'inquirer-helpers';
 import * as torrentSearch from 'torrent-search-api';
+import * as ora from 'ora';
 import Config from './config';
 import Utils from './utils';
 import './temp';
@@ -32,7 +33,10 @@ const CLIFlix = {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName ),
+              spinner = ora ( `Waiting for "${chalk.bold ( 'OpenSubtitles' ) }"...` ).start (),
               subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
+
+        spinner.stop ();
 
         if ( !subtitlesAll.length ) {
 
@@ -102,10 +106,12 @@ const CLIFlix = {
     }
 
     const categories = {
-            ThePirateBay: 'Video',
-            TorrentProject: 'Video'
-          },
-          category = categories[provider] || 'All';
+      ThePirateBay: 'Video',
+      TorrentProject: 'Video'
+    };
+
+    const category = categories[provider] || 'All',
+          spinner = ora ( `Waiting for "${chalk.bold ( provider )}"...` ).start ();
 
     try {
 
@@ -114,11 +120,15 @@ const CLIFlix = {
 
       const torrents = await torrentSearch.search ( query, category, rows );
 
+      spinner.stop ();
+
       if ( !torrents.length ) throw new Error ( 'No torrents found.' );
 
       return torrents;
 
     } catch ( e ) {
+
+      spinner.stop ();
 
       console.error ( chalk.yellow ( `No torrents found via "${chalk.bold ( provider )}"` ) );
 
