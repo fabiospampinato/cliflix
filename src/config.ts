@@ -101,7 +101,8 @@ function initLocalConfig () {
 
     } else {
 
-      _.mergeWith ( Config, localConfig, ( prev, next ) => {
+      _.mergeWith ( Config, localConfig, ( prev, next, key ) => {
+        if ( key === 'downloads' ) return { ...next, path: path.resolve ( next.downloads.path ) }
         if ( !_.isArray ( prev ) || !_.isArray ( next ) ) return;
         return next;
       });
