@@ -118,7 +118,16 @@ const CLIFlix = {
       torrentSearch.disableAllProviders ();
       torrentSearch.enableProvider ( provider );
 
-      const torrents = await torrentSearch.search ( query, category, rows );
+      
+      // returns [] after 30 seconds of querying
+      const timeout = async () => await new Promise((res, rej) => setTimeout(() => res([]), 30_000))
+
+      const torrents = await Promise.race( 
+        [
+          torrentSearch.search ( query, category, rows ),
+          timeout()
+        ]
+      )
 
       spinner.stop ();
 
