@@ -2,12 +2,12 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import chalk from 'chalk';
 import * as execa from 'execa';
 import * as OpenSubtitles from 'opensubtitles-api';
 import * as parseTorrent from 'parse-torrent';
 import * as path from 'path';
 import prompt from 'inquirer-helpers';
+import {color} from 'specialist';
 import * as torrentSearch from 'torrent-search-api';
 import * as ora from 'ora';
 import Config from './config';
@@ -23,7 +23,7 @@ const CLIFlix = {
     const torrent = await CLIFlix.getTorrent (),
           magnet = await CLIFlix.getMagnet ( torrent );
 
-    if ( !magnet ) return console.error ( chalk.red ( 'Magnet not found.' ) );
+    if ( !magnet ) return console.error ( color.red ( 'Magnet not found.' ) );
 
     if ( ( Config.subtitles.languages.available.length || Config.subtitles.languages.favorites.length ) && !Utils.webtorrent.options.isSubtitlesSet ( webtorrentOptions ) ) {
 
@@ -33,7 +33,7 @@ const CLIFlix = {
 
         const languageName = await prompt.list ( 'Which language?', Utils.prompt.parseList ( Config.subtitles.languages.available, Config.subtitles.languages.favorites ) ),
               languageCode = Utils.language.getCode ( languageName ),
-              spinner = ora ( `Waiting for "${chalk.bold ( 'OpenSubtitles' ) }"...` ).start (),
+              spinner = ora ( `Waiting for "${color.bold ( 'OpenSubtitles' ) }"...` ).start (),
               subtitlesAll = await CLIFlix.getSubtitles ( torrent.title, languageCode );
 
         spinner.stop ();
@@ -83,11 +83,11 @@ const CLIFlix = {
 
       const torrents = await CLIFlix.getTorrents ( queryOrTorrent, 1 );
 
-      if ( !torrents.length ) return console.error ( chalk.red ( `No torrents found for "${chalk.bold ( queryOrTorrent )}"` ) );
+      if ( !torrents.length ) return console.error ( color.red ( `No torrents found for "${color.bold ( queryOrTorrent )}"` ) );
 
       torrent = await CLIFlix.getMagnet ( torrents[0] );
 
-      if ( !torrent ) return console.error ( chalk.red ( 'Magnet not found.' ) );
+      if ( !torrent ) return console.error ( color.red ( 'Magnet not found.' ) );
 
     }
 
@@ -111,7 +111,7 @@ const CLIFlix = {
     };
 
     const category = categories[provider] || 'All',
-          spinner = ora ( `Waiting for "${chalk.bold ( provider )}"...` ).start ();
+          spinner = ora ( `Waiting for "${color.bold ( provider )}"...` ).start ();
 
     try {
 
@@ -130,7 +130,7 @@ const CLIFlix = {
 
       spinner.stop ();
 
-      console.error ( chalk.yellow ( `No torrents found via "${chalk.bold ( provider )}"` ) );
+      console.error ( color.yellow ( `No torrents found via "${color.bold ( provider )}"` ) );
 
       const nextProviders = _.without ( providers, provider ),
             nextProvider = hasProvider ? providers[providers.indexOf ( provider ) + 1] : '';
@@ -152,7 +152,7 @@ const CLIFlix = {
 
       if ( !torrents.length ) {
 
-        console.error ( chalk.yellow ( `No torrents found for "${chalk.bold ( query )}", try another query.` ) );
+        console.error ( color.yellow ( `No torrents found for "${color.bold ( query )}", try another query.` ) );
 
         continue;
 

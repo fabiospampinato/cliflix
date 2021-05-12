@@ -2,13 +2,13 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import chalk from 'chalk';
 import * as fs from 'fs';
 import * as JSON5 from 'json5';
 import * as localeCode from 'locale-code';
 import * as os from 'os';
 import * as osLocale from 'os-locale';
 import * as path from 'path';
+import {color} from 'specialist';
 import prompt from 'inquirer-helpers';
 
 /* CONFIG */
@@ -97,7 +97,7 @@ function initLocalConfig () {
 
     if ( _.isError ( localConfig ) ) {
 
-      console.error ( chalk.red ( `Error reading the configuration file (${chalk.bold ( Config.localConfigPath )}). Is it properly formatted JSON?` ) );
+      console.error ( color.red ( `Error reading the configuration file (${color.bold ( Config.localConfigPath )}). Is it properly formatted JSON?` ) );
 
     } else {
 

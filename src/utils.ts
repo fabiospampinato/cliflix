@@ -2,7 +2,6 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import chalk from 'chalk';
 import * as filesizeParser from 'filesize-parser';
 import * as fs from 'fs';
 import * as inquirer from 'inquirer';
@@ -11,6 +10,7 @@ import prompt from 'inquirer-helpers';
 import * as isOnline from 'is-online';
 import * as prettySize from 'prettysize';
 import * as request from 'request-promise-native';
+import {color} from 'specialist';
 import * as temp from 'temp';
 import Config from './config';
 
@@ -22,7 +22,7 @@ const Utils = {
 
     const online = await isOnline ();
 
-    if ( !online ) throw new Error ( chalk.red ( 'Looks like you are offline, try again later.\n' ) ) ;
+    if ( !online ) throw new Error ( color.red ( 'Looks like you are offline, try again later.\n' ) ) ;
 
   },
 

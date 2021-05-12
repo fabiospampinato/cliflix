@@ -16,6 +16,7 @@
     "noUnusedParameters": false,
     "outDir": "dist",
     "pretty": true,
+    "resolveJsonModule": true,
     "strictNullChecks": true,
     "target": "es5"
   },
