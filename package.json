@@ -1,6 +1,6 @@
 {
   "name": "cliflix",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "description": "Watch anything instantaneously, just write its name.",
   "bin": "dist/src/bin/index.js",
   "main": "dist/src/index.js",
